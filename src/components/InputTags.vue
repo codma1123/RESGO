@@ -1,5 +1,4 @@
 <template>
-  <div>
     <v-combobox       
       class="ComboBox"
       label="태그를 입력해주세요."
@@ -8,9 +7,8 @@
       variant="solo"
       closable-chips
       v-model="tags"
-      prepend-inner-icon="mdi-magnify"
+      prepend-icon="mdi-magnify"
     />
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +20,6 @@ const tags = ref<string[]>([])
 <style scoped>
 .ComboBox { 
   color: black;
-  width: 300px;
+  width: 300px;  
 }
 </style>

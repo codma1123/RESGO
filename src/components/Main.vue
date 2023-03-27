@@ -2,25 +2,31 @@
   <div class="Main">
     <div class="Logo">
       LOGO
+    </div>    
+    <div class="Input">
+      <InputTags />
+      <InputImg />    
     </div>
-    <InputTags />
   </div>
 </template>
 
+
 <script setup lang="ts">
+import InputImg from './InputImg.vue';
 import InputTags from './InputTags.vue'
+
 </script>
 
 <style scoped>
 .Main {
-  height: 100vh;
-  padding-top: 20vh;
+  height: 100vh;  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
 }
 .Logo {
+  padding-top: 20vh;
   color: black;
   font-weight: bold;
   font-size: 130px; 
@@ -44,8 +50,23 @@ import InputTags from './InputTags.vue'
   }
 }
 
-.ComboBox {
-  
+.Input {
+  animation-duration: .5s;
+  animation-delay: 1s;  
+  animation-name: slide-in;  
+  animation-fill-mode: forwards;
+  transform: translateY(700px);
+  margin-right: 40px;
+}
+
+@keyframes slide-in {
+  0% {    
+    transform: translateY(700px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 
