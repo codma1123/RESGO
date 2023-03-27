@@ -3,8 +3,20 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 // Vuetify
-import { createVuetify } from 'vuetify'
+import { createVuetify, ThemeDefinition } from 'vuetify'
 
-export default createVuetify(
-  // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-)
+const mainTheme: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#7FA6F1'
+  }
+}
+
+export default createVuetify({
+  theme: {
+    defaultTheme: 'mainTheme',
+    themes: {
+      mainTheme
+    }
+  }
+})
