@@ -7,7 +7,7 @@ export type AsyncState<T, E = any> = {
 export type ImgResult = string
 
 export type StoreStates = {
-  imgResult: AsyncState<ImgResult>
+  [k in StatesTypes]: AsyncState<ImgResult>
 }
 
 export type StatesTypes = ImgResult 

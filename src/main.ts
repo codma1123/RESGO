@@ -7,6 +7,7 @@ import { loadFonts } from './plugins/webfontloader'
 document.oncontextmenu = () => false
 
 loadFonts()
+
 const pinia = createPinia()
 
 createApp(App)
