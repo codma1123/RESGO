@@ -7,7 +7,7 @@ const asyncUtils = {
     error: error || null
   }),
 
-  loading: () => ({
+  loading: <T, E>(): AsyncState<T, E> => ({
     loading: true,
     data: null,
     error: null
@@ -19,7 +19,7 @@ const asyncUtils = {
     error: null
   }),
 
-  error: <E = any>(error: E) => ({
+  error: <T, E = any>(error: E): AsyncState<T, E> => ({
     loading: false,
     data: null,
     error

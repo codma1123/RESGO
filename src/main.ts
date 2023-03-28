@@ -4,6 +4,8 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 
+document.oncontextmenu = () => false
+
 loadFonts()
 const pinia = createPinia()
 
