@@ -12,7 +12,7 @@
 
 
 <script setup lang="ts">
-import InputImg from './InputImg.vue';
+import InputImg from './InputImg.vue'
 import InputTags from './InputTags.vue'
 
 </script>

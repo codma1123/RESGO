@@ -12,18 +12,27 @@
 
     <div class="ImgBox">
       <v-img         
-        v-if="imgs.length" :src="img" 
+        v-if="imgs.length" 
+        :src="img" 
       />
-    </div>
-    
+    </div>    
+    <v-btn 
+      variant="text"
+      @click="img && submitImg(img)"
+    >
+      submit
+    </v-btn>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useStore } from '../store';
 
 const img = ref<string>()
 const imgs = ref<File[]>([])
+
+const { submitImg } = useStore()
 
 const imgChange = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -55,8 +64,7 @@ const imgChange = (e: Event) => {
   padding: 1rem;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  
+  overflow: hidden;  
 }
 
 @keyframes fade-in {
