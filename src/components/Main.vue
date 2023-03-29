@@ -10,11 +10,9 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-import InputImg from './InputImg.vue'
-import InputTags from './InputTags.vue'
-
+  import InputImg from './InputImg.vue'
+  import InputTags from './InputTags.vue'
 </script>
 
 <style scoped>

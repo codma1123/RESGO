@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue' 
-import { AsyncState, StatesTypes, StoreStates } from './type'
+import { StoreStates } from './type'
 import { createAsyncStoreCallback, asyncUtils } from './utils'
 
 const { initial } = asyncUtils
@@ -11,8 +11,8 @@ export const useStore = defineStore('store', () => {
     imgResult: initial()
   })
 
-  const submitImg = createAsyncStoreCallback(states)    
-      
+  const submitImg = createAsyncStoreCallback(states)
+        
   return {
     states,
     submitImg

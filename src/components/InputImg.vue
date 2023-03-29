@@ -17,10 +17,11 @@
       />
     </div>    
     <v-btn 
-      variant="text"
+      class="SubmitBtn"
+      variant="tonal"
       @click="img && submitImg(img)"
     >
-      submit
+      제출
     </v-btn>
   </div>
 </template>
@@ -82,6 +83,11 @@ const imgChange = (e: Event) => {
 .Img {
   max-width: 300px;
   max-height: 400px !important;
+}
+
+.SubmitBtn {
+   margin-left: 120px; 
+   margin-top: 10px;
 }
 
 
