@@ -1,29 +1,20 @@
 <template>
-  <div>
-    <v-file-input
-      class="FileInput"
-      label="사진을 선택해주세요."
-      accept="image/png, image/jpeg, image/bmp"
-      prepend-icon="mdi-camera"
-      @change="imgChange"
-      v-model="imgs"
-      variant="solo"
-    />
+  <v-file-input
+    class="FileInput"
+    label="사진을 선택해주세요."
+    accept="image/png, image/jpeg, image/bmp"
+    prepend-icon="mdi-camera"
+    @change="imgChange"
+    v-model="imgs"
+    variant="solo"
+  />
 
-    <div class="ImgBox">
-      <v-img         
-        v-if="imgs.length" 
-        :src="img" 
-      />
-    </div>    
-    <v-btn 
-      class="SubmitBtn"
-      variant="tonal"
-      @click="img && submitImg(img)"
-    >
-      제출
-    </v-btn>
-  </div>
+  <div class="ImgBox">
+    <v-img         
+      v-if="imgs.length" 
+      :src="img" 
+    />
+  </div>       
 </template>
 
 <script setup lang="ts">
@@ -33,13 +24,18 @@ import { useStore } from '../store';
 const img = ref<string>()
 const imgs = ref<File[]>([])
 
-const { submitImg } = useStore()
+const { submitImg, states } = useStore()
+const emit = defineEmits<{
+  (e: 'img-change', value: string): void
+}>()
 
 const imgChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   if(!(target.files instanceof FileList)) return
   const url = URL.createObjectURL(target.files[0])
   img.value = url
+  emit('img-change', img.value)
+  
 }
 </script>
 
@@ -50,7 +46,7 @@ const imgChange = (e: Event) => {
 
 .ImgBox {
   height: 250px;
-  margin-left: 35px;
+  margin-left: 43px;
   margin-top: 20px;
   border-radius: 10%;
   outline: 5px dashed rgb(210, 202, 202);
@@ -65,7 +61,8 @@ const imgChange = (e: Event) => {
   padding: 1rem;
   align-items: center;
   justify-content: center;
-  overflow: hidden;  
+  overflow: hidden;
+  position: relative;
 }
 
 @keyframes fade-in {
@@ -79,16 +76,11 @@ const imgChange = (e: Event) => {
 }
 
 
-
 .Img {
   max-width: 300px;
   max-height: 400px !important;
 }
 
-.SubmitBtn {
-   margin-left: 120px; 
-   margin-top: 10px;
-}
 
 
 </style>

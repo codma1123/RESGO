@@ -6,15 +6,36 @@
       chips
       variant="solo"
       closable-chips
-      v-model="tags"
+      v-model="tag"
       prepend-icon="mdi-magnify"
     />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue';
+
+
+interface InputTagProp {
+  tags: string[]
+}
+
+interface InputTagEmit {
+  (e: 'update:tags', value: string[]): void
+}
+
+const prop = defineProps<InputTagProp>()
+const emit = defineEmits<InputTagEmit>()
+
+const tag = computed({
+  get() {
+    return prop.tags
+  },
+
+  set(value) {
+    emit('update:tags', value)
+  }
+})
  
-const tags = ref<string[]>([])
 </script>
 
 <style scoped>
