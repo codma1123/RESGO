@@ -17,32 +17,18 @@
       제출
     </v-btn>
   </div>
-  <v-snackbar 
-    rounded="pill"
-    v-model="snackBar"
-    :timeout="timeout"
-    elevation="24"
-    class="SnackBar"    
-  >
-    이미지 또는 태그를 등록해주세요.
-    <template v-slot:actions>
-      <v-btn
-        class="CloseBtn"
-        color="red"
-        variant="text"
-        @click="snackBar = false"
-      >
-        닫기
-      </v-btn>
-    </template>
-  </v-snackbar>
+  <SnackBar 
+    v-model:snackBar="snackBar"
+    @clicked="snackBar = false"
+  />
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref } from 'vue'
   import { useStore } from '../store'
   import InputImg from './InputImg.vue'
   import InputTags from './InputTags.vue'
+  import SnackBar from './SnackBar.vue'
 
   const { submitImg } = useStore()
 
@@ -132,7 +118,6 @@
     border-top-left-radius: 25px;
     box-shadow: 0px 3px 3px 0px black;
   }
-    
 } 
 
 </style>

@@ -1,14 +1,14 @@
 <template>
-    <v-combobox       
-      class="ComboBox"
-      label="태그를 입력해주세요."
-      multiple
-      chips
-      variant="solo"
-      closable-chips
-      v-model="tag"
-      prepend-icon="mdi-magnify"
-    />
+  <v-combobox       
+    class="ComboBox"
+    label="태그를 입력해주세요."
+    multiple
+    chips
+    variant="solo"
+    closable-chips
+    v-model="tag"
+    prepend-icon="mdi-magnify"
+  />
 </template>
 
 <script setup lang="ts">
