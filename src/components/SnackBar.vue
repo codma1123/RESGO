@@ -2,7 +2,7 @@
   <v-snackbar 
     rounded="pill"
     v-model="enable"
-    :timeout="timeout"
+    timeout="1000"
     elevation="24"
     class="SnackBar"    
   >
@@ -36,7 +36,6 @@ interface SnackBarEmit {
 const prop = defineProps<SnackBarProp>()
 const emit = defineEmits<SnackBarEmit>()
 
-const timeout = 1000
 
 const enable = computed({
   get() {

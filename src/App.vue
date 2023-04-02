@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <HelloWorld/>
+      <Main/>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts" setup>
-import HelloWorld from './components/Main.vue'
+import Main from './components/Main.vue'
 </script>
 
 <style>

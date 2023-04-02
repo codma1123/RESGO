@@ -32,8 +32,6 @@
 
   const { submitImg } = useStore()
 
-  const timeout = 1000
-
   const img = ref<string>('')
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
