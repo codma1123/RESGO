@@ -18,13 +18,15 @@ export const useStore = defineStore('store', () => {
     imgResult: initial()
   })
 
+  
   const submitImg = createAsyncStoreCallback(states)
 
   const predictImg = async (img: HTMLImageElement): Promise<void> => {
     states.imgResult.loading = true
+
     try {
       const predictions = await model.value?.detect(img)
-      if (typeof predictions === 'undefined') throw Error('Fail Prediction')
+      if (!predictions) throw Error('Fail Prediction')
       states.imgResult.loading = false
       states.imgResult.data = predictions
     } catch (e: unknown) {
@@ -34,13 +36,11 @@ export const useStore = defineStore('store', () => {
   }
 
   const loadModel = async () => {
-    load().then((value: ObjectDetection) => {
-      model.value = value
-    })
+    model.value = Object.freeze(await load())
   }
 
   onMounted(() => {
-    loadModel()
+    // loadModel()
   })
 
   return {
