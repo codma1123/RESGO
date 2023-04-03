@@ -72,24 +72,9 @@
   color: black;
   font-weight: bold;
   font-size: 130px; 
+  animation-name: fade-in;
   animation-duration: 1s;  
   letter-spacing: .5rem;
-  animation-name: fade-in;
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-    letter-spacing: 0rem;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
-  100% {
-    letter-spacing: .5rem;
-  }
 }
 
 .Input {
@@ -98,17 +83,8 @@
   animation-name: slide-in;  
   animation-fill-mode: forwards;
   transform: translateY(700px);
-  margin-right: 40px;  
-}
-
-@keyframes slide-in {
-  0% {    
-    transform: translateY(700px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
+  margin-right: 40px;
+  margin-top: 10px;
 }
 
 .SubmitBtn {
@@ -117,6 +93,8 @@
   transition: .5s;
   background-color: white;
   color: black !important;
+  animation-name: up;
+  animation-duration: .5s;
 }
 	
 @media (max-width: 800px) {
@@ -135,5 +113,41 @@
     height: calc(100px + 3%) !important;
   }
 } 
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    letter-spacing: 0rem;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    letter-spacing: .5rem;
+  }
+}
+
+@keyframes slide-in {
+  0% {    
+    transform: translateX(1700px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes up {
+  0% {
+    transform: translateY(700px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 
 </style>

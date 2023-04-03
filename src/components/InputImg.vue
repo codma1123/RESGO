@@ -61,13 +61,10 @@ const imgChange = (e: Event) => nextTick(() => {
   margin-left: 43px;
   margin-top: 20px;
   border-radius: 10%;
-  outline: 5px dashed rgb(210, 202, 202);
-  background-color: rgb(193, 198, 240);
-  opacity: .0;
+  outline: 3px dashed rgb(163, 189, 238);
+  background-color: white;
   width: 250px;
-  animation: fade-in;
-  animation-duration: .5s;
-  animation-delay: 1.5s;
+
   animation-fill-mode: forwards;
   display: flex; 
   padding: 1rem;
