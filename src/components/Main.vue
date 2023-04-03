@@ -11,7 +11,7 @@
     </div>    
     <v-btn 
       class="SubmitBtn"
-      variant="tonal"
+      variant="elevated"
       @click="btnClick"
     >
       제출
@@ -115,6 +115,8 @@
   margin-top: 50px;
   font-size: 20px;
   transition: .5s;
+  background-color: white;
+  color: black !important;
 }
 	
 @media (max-width: 800px) {
@@ -127,6 +129,10 @@
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
     box-shadow: 0px 3px 3px 0px black;
+  }
+
+  .SubmitBtn:hover {
+    height: calc(100px + 3%) !important;
   }
 } 
 
