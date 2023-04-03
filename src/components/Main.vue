@@ -6,7 +6,7 @@
     <div class="Input">
       <InputTags v-model:tags="tags"/>
       <InputImg 
-        @img-change="e => img = e"
+        @img-change="imgChange"
       />
     </div>    
     <v-btn 
@@ -26,20 +26,32 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useStore } from '../store'
-  import InputImg from './InputImg.vue'
+  import InputImg, { ImgChangeType } from './InputImg.vue'
   import InputTags from './InputTags.vue'
   import SnackBar from './SnackBar.vue'
+  import { VImg } from 'vuetify/components'
 
-  const { submitImg } = useStore()
+  const { submitImg, predictImg } = useStore()
 
   const img = ref<string>('')
+  const imgObj = ref<VImg>()
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
+
+  const imgChange = (e: ImgChangeType) => {
+    console.log(e)
+    img.value = e.img
+    imgObj.value = e.imgObj
+  }
   
-  const btnClick = (): void => {
-    if(!img.value && tags.value?.length === 0) snackBar.value = true      
+  const btnClick = (): void => {    
+    if((!img.value && tags.value?.length === 0) || !imgObj.value?.image) {
+      snackBar.value = true
+      return
+    }
+        
+    predictImg(imgObj.value.image)
     
-    submitImg(img.value)
     img.value = ''   
     tags.value = []
   }

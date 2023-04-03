@@ -10,7 +10,8 @@
   />
 
   <div class="ImgBox">
-    <v-img         
+    <v-img
+      ref="imgObj"
       v-if="imgs.length" 
       :src="img" 
     />
@@ -18,25 +19,36 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useStore } from '../store';
+import { nextTick, ref } from 'vue';
+import { VImg } from 'vuetify/components';
+
+export type ImgChangeType = {
+  img: string
+  imgObj: VImg
+}
+
+interface InputImgEmit {
+  (e: 'img-change', value: ImgChangeType): void 
+}
 
 const img = ref<string>()
 const imgs = ref<File[]>([])
+const imgObj = ref<VImg>()
 
-const { submitImg, states } = useStore()
-const emit = defineEmits<{
-  (e: 'img-change', value: string): void
-}>()
+const emit = defineEmits<InputImgEmit>()
 
-const imgChange = (e: Event) => {
+const imgChange = (e: Event) => nextTick(() => {  
   const target = e.target as HTMLInputElement
-  if(!(target.files instanceof FileList)) return
+  if(!(target.files instanceof FileList) || !imgObj.value) return  
   const url = URL.createObjectURL(target.files[0])
   img.value = url
-  emit('img-change', img.value)
   
-}
+  emit('img-change', {
+    img: img.value,
+    imgObj: imgObj.value
+  })  
+})
+
 </script>
 
 <style scoped>
