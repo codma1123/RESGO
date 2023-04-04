@@ -1,7 +1,7 @@
 import { AsyncState, StatesTypes, StoreStates } from "./type"
 
 export const asyncUtils = {
-  initial: <T = StatesTypes, E = any>(data?: T, error?: E): AsyncState<T, E> => ({
+  initial: <T, E = any>(data?: T, error?: E): AsyncState<T, E> => ({
     loading: false,
     data: data ?? null,
     error: error || null
@@ -26,12 +26,12 @@ export const asyncUtils = {
   }),
 }
 
-export const createAsyncStoreCallback = (states: StoreStates) => {
+export const createAsyncStoreCallback = (states: StoreStates, callback?: any) => {
   const { loading, fulfilled, error } = asyncUtils
-  return async (state: StatesTypes): Promise<void> => {
+  return async (state: keyof StatesTypes): Promise<void> => {
     states[state] = loading()
     try {
-      const result = await state
+      const result = await callback
       states[state] = fulfilled(result)
     } catch (e) {
       states[state] = error(e)

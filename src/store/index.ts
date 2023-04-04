@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue' 
-import { StoreStates } from './type'
+import { ImgResult, Model, StoreStates } from './type'
 import { createAsyncStoreCallback, asyncUtils } from './utils'
 import { load, ObjectDetection } from '@tensorflow-models/coco-ssd'
 import { onMounted } from 'vue'
@@ -8,39 +8,47 @@ import { onMounted } from 'vue'
 import '@tensorflow/tfjs-backend-cpu';
 import '@tensorflow/tfjs-backend-webgl';
 
-const { initial } = asyncUtils
+const { initial, loading, fulfilled, error } = asyncUtils
 
 export const useStore = defineStore('store', () => {
 
-  const model = ref<Readonly<ObjectDetection>>()
-
   const states = reactive<StoreStates>({
-    imgResult: initial()
+    imgResult: initial<ImgResult>(),
+    model: initial<Model>(),
   })
-
   
   const submitImg = createAsyncStoreCallback(states)
+  const detectImg = createAsyncStoreCallback(states, (img: HTMLImageElement) => {
+    (states.model.data as Model).detect(img)
+  })
+  
+  const loadModel = async () => {
+    states.model.loading = true
+    try {       
+      states.model.data = Object.freeze(await load())
+    } catch (e) {      
+      console.log(e)
+    } finally {
+      states.model.loading = false      
+    }
+  }
 
   const predictImg = async (img: HTMLImageElement): Promise<void> => {
-    states.imgResult.loading = true
+    
+    states.imgResult = loading()
 
     try {
-      const predictions = await model.value?.detect(img)
-      if (!predictions) throw Error('Fail Prediction')
-      states.imgResult.loading = false
-      states.imgResult.data = predictions
+      const predictions = await (states.model.data as Model).detect(img)
+      states.imgResult = fulfilled(predictions)
+      
     } catch (e: unknown) {
-      states.imgResult.loading = true
+      states.imgResult = error(e)
       console.log(e)
     }
   }
 
-  const loadModel = async () => {
-    model.value = Object.freeze(await load())
-  }
-
   onMounted(() => {
-    // loadModel()
+    // setTimeout(() => loadModel(), 1000)
   })
 
   return {

@@ -8,8 +8,10 @@
     variant="solo"
     closable-chips
     v-model="tag"
-    prepend-icon="mdi-magnify"
-  />
+    append-inner-icon="mdi-magnify"
+    small-chips
+  >        
+  </v-combobox>
 </template>
 
 <script setup lang="ts">
@@ -40,10 +42,14 @@ const tag = computed({
   }
 })
 
+const log = (chip: any) => {
+  console.log(chip)
+}
+
 onMounted(() => {  
   setTimeout(() => {
     (document.querySelector('#input-0') as HTMLInputElement).focus()
-  }, 1600)
+  }, 2000)
 })
  
 </script>
@@ -51,6 +57,6 @@ onMounted(() => {
 <style scoped>
 .ComboBox { 
   color: black;
-  width: 300px;  
+  width: 300px;
 }
 </style>

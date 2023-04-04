@@ -1,20 +1,35 @@
-<template>
-  <v-file-input
-    class="FileInput"
-    label="사진을 선택해주세요."
-    accept="image/png, image/jpeg, image/bmp"
-    prepend-icon="mdi-camera"
-    @change="imgChange"
-    v-model="imgs"
-    variant="solo"
-  />
+<template>  
+  <div class="ImgBox">    
+    <transition name="fade">
+      <v-img
+          v-if="imgs.length !== 0"
+          class="Img"
+          ref="imgObj"      
+          :src="img"
+        />
+        <div v-else class="Input">
+          <v-file-input
+            class="FileInput"        
+            accept="image/png, image/jpeg, image/bmp"
+            prepend-icon=""
+            @change="imgChange"
+            v-model="imgs"
+            variant="plain"
+          />      
+          <span class="label">사진을 선택해주세요.</span>
+        </div>
+    </transition>
 
-  <div class="ImgBox">
-    <v-img
-      ref="imgObj"
-      v-if="imgs.length" 
-      :src="img" 
-    />
+    <transition name="fade">
+      <v-btn 
+        v-if="imgs.length !== 0"
+        density="compact"
+        elevation="0"
+        class="CloseBtn" 
+        icon="mdi-close"
+        @click="imgs = []"
+      />
+    </transition>
   </div>       
 </template>
 
@@ -51,28 +66,50 @@ const imgChange = (e: Event) => nextTick(() => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .FileInput {
-  width: 300px;  
+  width: 300px !important; 
+  height: 300px !important;  
 }
 
 .ImgBox {
-  height: 250px;
-  margin-left: 43px;
+  height: 300px;
+  width: 300px;
   margin-top: 20px;
+  font-size: 12px;
+  position: relative;  
   border-radius: 10%;
-  outline: 3px dashed rgb(163, 189, 238);
+  color: rgb(112, 103, 103);
   background-color: white;
-  width: 250px;
-
-  animation-fill-mode: forwards;
+  outline: 3px dashed rgb(163, 189, 238);
+  
   display: flex; 
   padding: 1rem;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  position: relative;
+  animation-fill-mode: forwards;
+  transition: .5s;
+
+  .Input {
+    position: relative;
+    text-align: center;
+    
+    .label {
+      position: absolute;
+      transition: .3s;
+      top: 50%;
+      left: 100px;
+    }
+  }  
+
+  &:hover {
+    .label {
+      color: black;
+    }
+  }
 }
+
 
 @keyframes fade-in {
   from {
@@ -86,10 +123,14 @@ const imgChange = (e: Event) => nextTick(() => {
 
 
 .Img {
-  max-width: 300px;
-  max-height: 400px !important;
+  max-width: 97%;
+  max-height: 97% !important;
 }
 
-
+.CloseBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
 
 </style>

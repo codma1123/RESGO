@@ -58,7 +58,7 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .Main {
   height: 100vh;  
   display: flex;
@@ -83,18 +83,18 @@
   animation-name: slide-in;  
   animation-fill-mode: forwards;
   transform: translateY(700px);
-  margin-right: 40px;
   margin-top: 10px;
 }
 
 .SubmitBtn {
   margin-top: 50px;
   font-size: 20px;
-  transition: .5s;
+  transition: .3s;
   background-color: white;
   color: black !important;
   animation-name: up;
   animation-duration: .5s;
+  animation-timing-function:cubic-bezier(0.28, 0.5, 0.265, 0.7);
 }
 	
 @media (max-width: 800px) {
@@ -104,14 +104,13 @@
     bottom: 0px;
     width: 100%;
     height: 100px !important;
-    border-top-right-radius: 25px;
-    border-top-left-radius: 25px;
-    box-shadow: 0px 3px 3px 0px black;
-  }
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
 
-  .SubmitBtn:hover {
-    height: calc(100px + 3%) !important;
-  }
+    &:hover {
+      height: calc(100px + 1%) !important;
+    }
+  }  
 } 
 
 @keyframes fade-in {
