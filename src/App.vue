@@ -23,6 +23,19 @@ $chip-border-radius: 0px !important;
   width: 0px;
 }
 
+body {
+  background-color: #7FA6F1 !important;
+}
+  
+#app {
+  height: calc(var(--vh, 1vh) * 100);
+  overflow: scroll;
+  .v-application--wrap {
+    min-height: calc(var(--vh, 1vh) * 100) !important; // 덮어씌우기
+  }
+}
+
+
 .wf-active {
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 500;

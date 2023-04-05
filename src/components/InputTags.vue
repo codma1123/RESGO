@@ -49,7 +49,7 @@ const log = (chip: any) => {
 onMounted(() => {  
   setTimeout(() => {
     (document.querySelector('#input-0') as HTMLInputElement).focus()
-  }, 2000)
+  }, 3000)
 })
  
 </script>

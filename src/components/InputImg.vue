@@ -75,13 +75,11 @@ const imgChange = (e: Event) => nextTick(() => {
 .ImgBox {
   height: 300px;
   width: 300px;
-  margin-top: 20px;
   font-size: 12px;
   position: relative;  
   border-radius: 10%;
   color: rgb(112, 103, 103);
   background-color: white;
-  outline: 3px dashed rgb(163, 189, 238);
   
   display: flex; 
   padding: 1rem;

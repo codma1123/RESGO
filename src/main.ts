@@ -10,7 +10,18 @@ loadFonts()
 
 const pinia = createPinia()
 
+
 createApp(App)
-  .use(vuetify)
-  .use(pinia)
-  .mount('#app')
+.use(vuetify)
+.use(pinia)
+.mount('#app')
+
+let customVH = window.innerHeight * 0.01
+document.documentElement.style.setProperty('--vh', customVH + 'px')
+window.addEventListener('resize', () => {
+  let customVH = window.innerHeight * 0.01
+  document.documentElement.style.setProperty(
+    '--vh',
+    customVH + 'px',
+  )
+})
