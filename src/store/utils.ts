@@ -44,7 +44,7 @@ export const createAsyncStoreCallback = (states: StoreStates) => {
       callback: effect, 
       afterEffect: null
     } : effect
-        
+
     states[state] = loading()
 
     callback()

@@ -1,44 +1,3 @@
-<template>
-  <div class="Main">
-    <template v-if="!asyncStates.model.loading">
-      <div class="Logo">
-        LOGO
-      </div>    
-      <div class="Input">
-        <InputTags v-model:tags="tags"/>
-        <InputImg 
-          @img-change="imgChange"
-        />
-      </div>    
-      <v-btn 
-        class="SubmitBtn"
-        variant="elevated"
-        elevation="0"
-        @click="btnClick"
-      >
-        제출
-      </v-btn>
-    </template>
-    <template v-else>
-      <div class="LoadingCircular">
-        <v-progress-circular 
-          :size="30"
-          color="white"
-          indeterminate 
-        />      
-        <div class="mt-5">
-          모델을 불러오는 중입니다.
-        </div>
-      </div>
-    </template>
-
-  </div>
-  <SnackBar 
-    v-model:snackBar="snackBar"
-    @clicked="snackBar = false"
-  />
-</template>
-
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import { useStore } from '../store'
@@ -76,6 +35,47 @@
   })
 
 </script>
+
+<template>
+  <div class="Main">
+    <template v-if="!asyncStates.model.loading">
+      <div class="Logo">
+        LOGO
+      </div>    
+      <div class="Input">
+        <InputTags v-model:tags="tags"/>
+        <InputImg 
+          @img-change="imgChange"
+        />
+      </div>    
+      <v-btn 
+        class="SubmitBtn"
+        variant="elevated"
+        elevation="0"
+        @click="btnClick"
+      >
+        제출
+      </v-btn>
+    </template>
+    <template v-else>
+      <div class="LoadingCircular">
+        <v-progress-circular 
+          :size="30"
+          color="white"
+          indeterminate 
+        />      
+        <div class="mt-5">
+          모델을 불러오는 중입니다.
+        </div>
+      </div>
+    </template>
+  </div>
+  
+  <SnackBar 
+    v-model:snackBar="snackBar"
+    @clicked="snackBar = false"
+  />
+</template>
 
 <style scoped lang="scss">
 .Main {

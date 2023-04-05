@@ -23,7 +23,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-
 interface SnackBarProp {
   snackBar: boolean
 }
@@ -36,14 +35,9 @@ interface SnackBarEmit {
 const prop = defineProps<SnackBarProp>()
 const emit = defineEmits<SnackBarEmit>()
 
-
 const enable = computed({
-  get() {
-    return prop.snackBar
-  },
-  set(value: boolean) {
-    emit('updateValue', value)
-  }
+  get: () => prop.snackBar,
+  set: (value: boolean) => emit('updateValue', value)
 })
 
 
