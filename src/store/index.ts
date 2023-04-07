@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue' 
-import { ImgResult, Model, StoreStates } from './type'
+import { AsyncStore, ImgResult, Model, StoreStates } from './type'
 import { createAsyncStoreCallback, asyncUtils } from './utils'
 import { DetectedObject, load } from '@tensorflow-models/coco-ssd'
 
@@ -12,7 +12,7 @@ const { initial } = asyncUtils
 export const useStore = defineStore('store', () => {
 
   // 비동기 상태
-  const asyncStates = reactive<StoreStates>({
+  const asyncStates = reactive<AsyncStore>({
     imgResult: initial<ImgResult>(),
     model: initial<Model>(),
   })
@@ -40,14 +40,18 @@ export const useStore = defineStore('store', () => {
    */
   const predictImg = (img: HTMLImageElement | HTMLCanvasElement) => asyncStateCallback('imgResult', {
     callback: async () => await asyncStates.model.data?.detect(img),
-    afterEffect: (result: DetectedObject[]) => {
+    onLoaded: (result: DetectedObject[]) => {
       result.forEach(prediction => {
         console.log(`
           추청 객체: ${prediction.class}
           추정 확률: ${(prediction.score * 100).toFixed()}
         `)
+        console.log(`
+          영역: ${prediction.bbox}
+        `)
       })
-    }
+    },
+    onError: () => { }
   })
   
   return {
