@@ -1,12 +1,15 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import { useStore } from '../store'
-  import InputImg, { ImgChangeType } from './InputImg.vue'
-  import InputTags from './InputTags.vue'
-  import SnackBar from './SnackBar.vue'
+  import InputImg, { ImgChangeType } from '../components/InputImg.vue'
+  import InputTags from '../components/InputTags.vue'
+  import SnackBar from '../components/SnackBar.vue'
   import { VImg } from 'vuetify/components'
+import { useRouter } from 'vue-router'
 
   const { predictImg, loadModel, asyncStates } = useStore()
+
+  const router = useRouter()
 
   const img = ref<string>('')
   const imgObj = ref<VImg>()
@@ -24,7 +27,9 @@
       return
     }
         
-    predictImg(imgObj.value.image)
+    predictImg(imgObj.value.image).then(() => {
+      router.push('/result')
+    })
     
     img.value = ''   
     tags.value = []
@@ -101,11 +106,6 @@
 }
 
 .Input {
-  animation-duration: .5s;
-  animation-delay: 1s;  
-  animation-name: slide-in;  
-  animation-fill-mode: forwards;
-  transform: translateY(700px);
   margin-top: 10px;
 }
 

@@ -1,14 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <Main />
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from 'vue';
-import Main from './components/Main.vue'
 
 onMounted(() => {
   if (sessionStorage.fonts) {
