@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue' 
+import { reactive, ref, toRefs } from 'vue' 
 import { AsyncStore, ImgResult, Model, StoreStates } from './type'
 import { createAsyncStoreCallback, asyncUtils } from './utils'
 import { DetectedObject, load } from '@tensorflow-models/coco-ssd'
 
 import '@tensorflow/tfjs-backend-cpu';
 import '@tensorflow/tfjs-backend-webgl';
+import createKakaoRequest from '../api'
 
 const { initial } = asyncUtils
 
@@ -17,10 +18,18 @@ export const useStore = defineStore('store', () => {
     model: initial<Model>(),
   })
 
+  const imgRef = ref<HTMLImageElement | HTMLCanvasElement>()
+
+  const imgUrl = ref<string>('')
+
+  const searchTags = ref<string[]>([])
+
+  const imgTags = ref<any>()
+
 
   // 상태
   const states = reactive<{[state: string]: any}>({
-    
+    imgTags: []
   })
 
 
@@ -33,6 +42,10 @@ export const useStore = defineStore('store', () => {
    */
   const loadModel = () => asyncStateCallback('model', async () => Object.freeze(await load()))
 
+  const requestKakao = (img: BinaryData) => {
+    createKakaoRequest(img)
+  }
+
 
   /**
    * 이미지를 분석하는 액션
@@ -41,22 +54,24 @@ export const useStore = defineStore('store', () => {
   const predictImg = (img: HTMLImageElement | HTMLCanvasElement) => asyncStateCallback('imgResult', {
     callback: async () => await asyncStates.model.data?.detect(img),
     onLoaded: (result: DetectedObject[]) => {
-      result.forEach(prediction => {
-        console.log(`
-          추청 객체: ${prediction.class}
-          추정 확률: ${(prediction.score * 100).toFixed()}
-        `)
-        console.log(`
-          영역: ${prediction.bbox}
-        `)
-      })
+      imgRef.value = img
+      states.imgTags.push(result.map(prediction => prediction.class))
+      console.log(states.imgTags, 'states')
     },
-    onError: () => { }
   })
   
   return {
     asyncStates,
     loadModel,
-    predictImg
+    predictImg,
+    requestKakao,
+    imgRef,
+    imgUrl,
+    searchTags,
+    ...toRefs({
+      imgTags
+    }),
+
+    states
   }
 })

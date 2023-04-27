@@ -36,10 +36,12 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
 import { VImg } from 'vuetify/components';
+import { useStore } from '../store';
 
 export type ImgChangeType = {
   img: string
   imgObj: VImg
+  imgBinary: any
 }
 
 interface InputImgEmit {
@@ -49,18 +51,24 @@ interface InputImgEmit {
 const img = ref<string>()
 const imgs = ref<File[]>([])
 const imgObj = ref<VImg>()
+const imgBinary = ref<any>()
+
+const store = useStore() 
 
 const emit = defineEmits<InputImgEmit>()
 
-const imgChange = (e: Event) => nextTick(() => {  
+const imgChange = (e: Event) => nextTick(() => {
   const target = e.target as HTMLInputElement
   if(!(target.files instanceof FileList) || !imgObj.value) return  
   const url = URL.createObjectURL(target.files[0])
+  imgBinary.value = target.files[0]
+  store.imgUrl = url
   img.value = url
   
   emit('img-change', {
     img: img.value,
-    imgObj: imgObj.value
+    imgObj: imgObj.value,
+    imgBinary: imgBinary.value
   })  
 })
 

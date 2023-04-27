@@ -5,34 +5,38 @@
   import InputTags from '../components/InputTags.vue'
   import SnackBar from '../components/SnackBar.vue'
   import { VImg } from 'vuetify/components'
-import { useRouter } from 'vue-router'
+  import { useRouter } from 'vue-router'
 
-  const { predictImg, loadModel, asyncStates } = useStore()
+  const { predictImg, loadModel, asyncStates, searchTags, requestKakao } = useStore()
 
   const router = useRouter()
 
   const img = ref<string>('')
   const imgObj = ref<VImg>()
+  const imgBinary = ref<any>()
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
 
   const imgChange = (e: ImgChangeType) => {
     img.value = e.img
     imgObj.value = e.imgObj
+    imgBinary.value = e.imgBinary
   }
   
   const btnClick = (): void => {    
-    if((!img.value && tags.value?.length === 0) || !imgObj.value?.image) {
+    if((!img.value && tags.value?.length === 0) || !imgObj.value?.image || !imgBinary.value) {
       snackBar.value = true
       return
     }
         
     predictImg(imgObj.value.image).then(() => {
       router.push('/result')
+      searchTags?.concat(tags.value)
     })
     
     img.value = ''   
     tags.value = []
+    requestKakao(imgBinary.value)
   }
 
   onMounted(() => {
