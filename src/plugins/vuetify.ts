@@ -8,7 +8,7 @@ import { createVuetify, ThemeDefinition } from 'vuetify'
 const mainTheme: ThemeDefinition = {
   dark: false,
   colors: {
-    background: '#171717'
+    background: '#fff'
   }
 }
 

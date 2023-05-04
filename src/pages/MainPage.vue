@@ -7,47 +7,40 @@
   import { VImg } from 'vuetify/components'
   import { useRouter } from 'vue-router'
 
-  const { predictImg, loadModel, asyncStates, searchTags, requestKakao } = useStore()
+  const {  requestKakao } = useStore()
 
   const router = useRouter()
 
   const img = ref<string>('')
   const imgObj = ref<VImg>()
-  const imgBinary = ref<any>()
+  const uploadFile = ref<File>()
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
 
   const imgChange = (e: ImgChangeType) => {
     img.value = e.img
     imgObj.value = e.imgObj
-    imgBinary.value = e.imgBinary
+    uploadFile.value = e.uploadFile
+
   }
   
-  const btnClick = (): void => {    
-    if((!img.value && tags.value?.length === 0) || !imgObj.value?.image || !imgBinary.value) {
+  const btnClick = (): void => {
+    if(!img.value) {
       snackBar.value = true
       return
-    }
-        
-    predictImg(imgObj.value.image).then(() => {
-      router.push('/result')
-      searchTags?.concat(tags.value)
-    })
-    
+    }            
+
+
+    requestKakao(uploadFile.value!)
     img.value = ''   
     tags.value = []
-    requestKakao(imgBinary.value)
   }
-
-  onMounted(() => {
-    loadModel()
-  })
+  
 
 </script>
 
 <template>
   <div class="Main">
-    <template v-if="!asyncStates.model.loading">
       <div class="Logo">
         LOGO
       </div>    
@@ -65,19 +58,6 @@
       >
         제출
       </v-btn>
-    </template>
-    <template v-else>
-      <div class="LoadingCircular">
-        <v-progress-circular 
-          :size="30"
-          color="white"
-          indeterminate 
-        />      
-        <div class="mt-5">
-          모델을 불러오는 중입니다.
-        </div>
-      </div>
-    </template>
   </div>
   
   <SnackBar 

@@ -23,7 +23,7 @@ $chip-border-radius: 0px !important;
 }
 
 body {
-  background-color: #7FA6F1 !important;
+  background-color: #fff !important;
 }
   
 #app {

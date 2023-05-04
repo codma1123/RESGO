@@ -10,31 +10,31 @@ const tags = computed<string[]>(() => states.imgTags.flat())
 
 
 onMounted(() => {
-    console.log(states.imgTags)
+  console.log(states.imgTags)
 })
 
 </script>
 
 <template>
-    <AppHeader />
-    <v-container>
-        <div class="tag-wrapper">
-            <v-img 
-                class="img"
-                :src="imgUrl"
-            />
-            <div class="chip-wrapper">
-                <v-chip
-                    size="x-large"
-                    class="chip"
-                    label 
-                    v-for="(tag, i) in tags" :key="i"
-                >
-                    # {{ tag }}
-                </v-chip>
-            </div>
-        </div>
-    </v-container>
+  <AppHeader />
+  <v-container>
+    <div class="tag-wrapper">
+      <v-img
+        class="img"
+        :src="imgUrl"
+      />
+      <div class="chip-wrapper">
+        <v-chip
+          size="x-large"
+          class="chip"
+          label
+          v-for="(tag, i) in tags" :key="i"
+        >
+          # {{ tag }}
+        </v-chip>
+      </div>
+    </div>
+  </v-container>
 </template>
 
 <style lang="scss" scoped>
@@ -48,7 +48,7 @@ onMounted(() => {
 
     .img {
         overflow: visible;
-        width: 300px !important; 
+        width: 300px !important;
         height: 300px !important;
     }
 

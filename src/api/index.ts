@@ -1,20 +1,19 @@
 import axios from 'axios'
+import { KakaoFoodDetectionResponse } from './type';
 
-const KEY = '5cf5ceed6b6500af31bf861ca6040fa9'
-const createKakaoRequest = async (img: BinaryData): Promise<any> => {
-    const d = await axios.post(`/api`, {
-        body: {
-            img
-        },
-        headers: {
-            'x-api-key': KEY,
-            'Content-Type': 'multipart/form-data',
-            "Access-Control-Allow-Origin": '*',
-            'Access-Control-Allow-Credentials':"true",
-        } 
-    })
+const KEY = 'ab1c177c7689813c2e21482f6bd02ef6'
+const kakaoBaseUrl = '/api/ai/vision/c55bd2a0b70647ed97519363a94e3648';
 
-    console.log(d)
+const kakaoBaseHeaders = {
+    'x-api-key': KEY,
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'multipart/form-data',
 }
 
-export default createKakaoRequest
+const kakaoFoodDetectionRequest = (formData: FormData) => {
+    return axios.post<KakaoFoodDetectionResponse>(kakaoBaseUrl, formData, { headers: kakaoBaseHeaders })
+}
+
+export {
+    kakaoFoodDetectionRequest
+}
