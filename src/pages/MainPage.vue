@@ -7,19 +7,17 @@
   import { VImg } from 'vuetify/components'
   import { useRouter } from 'vue-router'
 
-  const {  requestKakao } = useStore()
+  const { requestKakao, states } = useStore()
 
   const router = useRouter()
 
   const img = ref<string>('')
-  const imgObj = ref<VImg>()
   const uploadFile = ref<File>()
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
 
   const imgChange = (e: ImgChangeType) => {
     img.value = e.img
-    imgObj.value = e.imgObj
     uploadFile.value = e.uploadFile
 
   }
@@ -28,10 +26,14 @@
     if(!img.value) {
       snackBar.value = true
       return
-    }            
+    }
 
+    states.imgUrl = img.value
 
     requestKakao(uploadFile.value!)
+      .then(() => router.push('/result'))
+      .catch((e: unknown) => console.log(e))
+
     img.value = ''   
     tags.value = []
   }

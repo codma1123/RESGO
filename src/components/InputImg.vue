@@ -40,7 +40,6 @@ import { useStore } from '../store';
 
 export type ImgChangeType = {
   img: string
-  imgObj: VImg
   uploadFile: File
 }
 
@@ -50,22 +49,18 @@ interface InputImgEmit {
 
 const img = ref<string>()
 const imgs = ref<File[]>([])
-const imgObj = ref<VImg>()
-
-const store = useStore() 
 
 const emit = defineEmits<InputImgEmit>()
 
 const imgChange = (e: Event) => nextTick(() => {
   const target = e.target as HTMLInputElement
-  if(!(target.files instanceof FileList) || !imgObj.value) return  
+  if(!(target.files instanceof FileList)) return  
   const uploadFile = target.files[0]
   const url = URL.createObjectURL(target.files[0])
   img.value = url
   
   emit('img-change', {
     img: img.value,
-    imgObj: imgObj.value,
     uploadFile: uploadFile
   })  
 })

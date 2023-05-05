@@ -14,11 +14,13 @@ export const useStore = defineStore('store', () => {
   const asyncStates = reactive<AsyncStore>({
     imgResult: initial<ImgResult>(),
     model: initial<Model>(),
-    result: initial<any>()
+    result: initial<string[]>()
   })
+  
   // 상태
-  const states = reactive<{[state: string]: any}>({
-    imgTags: []
+  const states = reactive({
+    imgTags: [],
+    imgUrl: ''
   })
 
 
@@ -27,20 +29,19 @@ export const useStore = defineStore('store', () => {
 
   const requestKakao = async (img: File) => {
     const { result } = asyncStates
+    result.loading = true    
 
     // 이미지 form 생성
     const imgBinary = new FormData()
     imgBinary.append('image', img)
     
-    result.loading = true    
     try {
       const res = await kakaoFoodDetectionRequest(imgBinary)
-      result.data = res.data.result
-                      .map((value: KakaoFoodDetectionResult) => value.class_info[0].food_name)
-                      .join(' ')
 
-      console.log(result.data)
-            
+      result.data = [...new Set(res.data.result
+        .sort((value, target) => value.h * value.w > target.h * target.h ? -1 : 1)
+        .map(value => value.class_info[0].food_name)
+      )]
     } catch (e) {
       console.log(e)
     }

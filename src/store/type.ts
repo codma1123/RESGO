@@ -36,7 +36,11 @@ type Effect = {
   onError?: ((error: unknown | undefined) => void) | null
 }
 
-type AsyncStore = Record<string, AsyncState<any>>
+type AsyncStore = {
+  imgResult: AsyncState<any>
+  model: AsyncState<any>
+  result: AsyncState<any>
+}
 
 export type {
   AsyncState,

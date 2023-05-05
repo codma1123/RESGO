@@ -4,9 +4,9 @@ import AppHeader from '../layouts/AppHeader.vue'
 import { useStore } from '../store';
 
 
-const { imgUrl, searchTags, imgTags, states } = useStore()
+const { asyncStates, states } = useStore()
 
-const tags = computed<string[]>(() => states.imgTags.flat())
+const tags = computed<string[]>(() => asyncStates.result.data)
 
 
 onMounted(() => {
@@ -21,7 +21,7 @@ onMounted(() => {
     <div class="tag-wrapper">
       <v-img
         class="img"
-        :src="imgUrl"
+        :src="states.imgUrl"
       />
       <div class="chip-wrapper">
         <v-chip
@@ -55,6 +55,7 @@ onMounted(() => {
     .chip-wrapper {
         margin-top: 10px;
         display: flex;
+        flex-wrap: wrap;
         gap: 10px;
 
         .chip {
