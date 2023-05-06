@@ -1,67 +1,128 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import AppHeader from '../layouts/AppHeader.vue'
+import { computed, ref } from 'vue';
 import { useStore } from '../store';
 
+const { asyncStates: { result, naverLocationSearchResult }, states } = useStore()
 
-const { asyncStates, states } = useStore()
+const tags = computed<string[]>(() => result.data ?? [])
 
-const tags = computed<string[]>(() => asyncStates.result.data)
+const tagExpand = ref<boolean>(false)
 
-
-onMounted(() => {
-  console.log(states.imgTags)
+const countedTags = computed<string[]>(() => {
+  if(tags.value.length < 5) return tags.value
+  return tagExpand.value ? tags.value : tags.value.slice(0, 5)
 })
 
 </script>
 
-<template>
-  <AppHeader />
-  <v-container>
-    <div class="tag-wrapper">
-      <v-img
-        class="img"
-        :src="states.imgUrl"
-      />
-      <div class="chip-wrapper">
-        <v-chip
-          class="chip"
-          label
-          v-for="(tag, i) in tags" :key="i"
+<template>  
+  <VContainer class="SearchResult">
+    <template v-if="!result.loading">
+      <div class="tag-wrapper">
+        <VCardTitle value="이미지 분석 격롸">
+          이미지 분석 결과
+        </VCardTitle>      
+  
+        <VImg
+          class="img"
+          :src="states.imgUrl"
+        />
+  
+        <div :class="['chip-wrapper', tagExpand ? 'wrap': '']" >
+          <VChip
+            class="chip"
+            label
+            color="black"
+            variant="outlined"
+            v-for="(tag, i) in countedTags" 
+            :key="i"
+          >
+            {{ tag }}
+          </VChip>
+        </div>
+  
+        <div 
+          class="more"
+          @click="tagExpand = !tagExpand"
         >
-          # {{ tag }}
-        </v-chip>
-      </div>
+          {{  tagExpand ? '간단히' : '더보기' }}
+        </div>
+      </div>  
+    </template>
+
+    <VProgressCircular v-else class="ProgressCircular"/>
+
+    <div class="result-wrapper" v-if="!naverLocationSearchResult.loading">
+      <VCardTitle>
+        이미지 분석 결과를 토대로 음식점을 검색해보았어요.
+      </VCardTitle>
+      <VCardText>
+        {{ naverLocationSearchResult.data }}
+      </VCardText>
     </div>
-  </v-container>
+
+  </VContainer>  
 </template>
 
 <style lang="scss" scoped>
+
+.SearchResult {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.result-wrapper,
 .tag-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 20px;
-  padding: 50px;  
-
+  width: 400px;
+  margin-top: 50px;  
   .img {
-    overflow: visible;
-    width: 300px !important;
-    height: 300px !important;
+    min-width: 100% !important;
+    border-radius: 1rem;
   }
 
   .chip-wrapper {
     margin-top: 10px;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
     gap: 5px;
+    max-width: 100%;
+    overflow-x: scroll;
+    
+    .chip {      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all .2s;
 
-    .chip {
-        border-radius: 1rem;
+      &:hover {
+        color: rgb(165, 112, 112) !important;
+      }
     }
-  }
+
+    &.wrap {
+      flex-wrap: wrap;
+    }
+  }  
+
+  .more {
+    align-self: flex-end;
+    font-size: 12px;
+    margin-top: .25rem;
+    cursor: pointer;
+  }  
 }
 
+.ProgressCircular {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
 
 </style>

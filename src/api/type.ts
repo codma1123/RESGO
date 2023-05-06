@@ -1,3 +1,4 @@
+// 카카오 음식 분석
 interface KakaoFoodDetectionResponse {
   created: string
   proc_secs: number
@@ -21,8 +22,30 @@ interface Class_Info {
   food_nutrients: any
 }
 
+
+
+// 네이버 장소 검색
+interface NaverLocationResponse {
+  display: number 
+  items: ResultItem[]
+  lastBuildDate: string
+  start: number
+  total: number  
+}
+
+interface ResultItem {
+  title: string
+  link: string
+  category: string
+  description: string
+  telephone: string  
+}
+
 export type {
   KakaoFoodDetectionResponse,
   KakaoFoodDetectionResult,
-  Class_Info
+  Class_Info,
+
+  NaverLocationResponse,
+  ResultItem
 }

@@ -1,8 +1,12 @@
-import { defineConfig } from 'vite'
+import { ProxyOptions, defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-
-// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
 import vuetify from 'vite-plugin-vuetify'
+
+const defaultProxyOption: ProxyOptions = {
+	changeOrigin: true,	
+	secure: false,
+	ws: true
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,11 +22,16 @@ export default defineConfig({
 		proxy: {
 			'/api': {
 				target: 'https://a993e630-bbb4-4e5e-87c9-6a0f187f5c15.api.kr-central-1.kakaoi.io',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        secure: false,
-        ws: true
+				rewrite: (path) => path.replace(/^\/api/, ''),
+        ...defaultProxyOption,
+			},
+			'/naver': {
+				target: 'https://openapi.naver.com',
+				rewrite: (path) => path.replace(/^\/naver/, ''),
+        ...defaultProxyOption,
 			}
 		}
   }
 })
+
+

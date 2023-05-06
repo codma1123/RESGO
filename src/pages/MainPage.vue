@@ -7,7 +7,7 @@
   import { VImg } from 'vuetify/components'
   import { useRouter } from 'vue-router'
 
-  const { requestKakao, states } = useStore()
+  const { requestKakao, resquestNaver, states } = useStore()
 
   const router = useRouter()
 
@@ -16,13 +16,13 @@
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
 
-  const imgChange = (e: ImgChangeType) => {
+  const imgChange = (e: ImgChangeType): void => {
     img.value = e.img
     uploadFile.value = e.uploadFile
 
   }
   
-  const btnClick = (): void => {
+  const btnClick = async (): Promise<void> => {
     if(!img.value) {
       snackBar.value = true
       return
@@ -30,15 +30,12 @@
 
     states.imgUrl = img.value
 
-    requestKakao(uploadFile.value!)
-      .then(() => router.push('/result'))
-      .catch((e: unknown) => console.log(e))
-
-    img.value = ''   
-    tags.value = []
+    router.push('/result')
+    
+    const query = await requestKakao(uploadFile.value!)
+    await resquestNaver(query)
   }
   
-
 </script>
 
 <template>
@@ -68,7 +65,7 @@
   />
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .Main {
   display: flex;
   flex-direction: column;

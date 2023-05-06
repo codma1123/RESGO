@@ -1,13 +1,15 @@
 <template>
   <v-app>
     <v-main>
-      <router-view></router-view>
+      <AppHeader />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from 'vue';
+import AppHeader from './layouts/AppHeader.vue'
 
 onMounted(() => {
   if (sessionStorage.fonts) {
@@ -20,10 +22,12 @@ onMounted(() => {
 $chip-border-radius: 0px !important;
 ::-webkit-scrollbar {
   width: 0px;
+  height: 0px;
 }
 
 body {
   background-color: #fff !important;
+  font-family: 'Pretendard';
 }
   
 #app {
@@ -32,12 +36,6 @@ body {
   .v-application--wrap {
     min-height: calc(var(--vh, 1vh) * 100) !important; // 덮어씌우기
   }
-}
-
-
-.wf-active {
-  font-family: "Noto Sans KR", sans-serif;
-  font-weight: 500;
 }
 
 .fade-leave-to,

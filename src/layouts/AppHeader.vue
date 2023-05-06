@@ -1,31 +1,39 @@
-<script setup lang="ts">import { ref } from 'vue';
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
 
-
-const logo = ref<any>('로고')
-
-
+const router = useRouter()
 </script>
 
 <template>
-    <v-sheet 
-        class="Header"
-        height="50"
-        width="100%"
+  <v-sheet 
+    class="Header"
+    height="50"
+    width="100%"
+    color="#e9e9ff"
+  >
+    <v-card-title 
+      class="logo"
+      @click="router.push('/')"      
     >
-        <v-card-title>
-            {{ logo }}
-        </v-card-title>
-            
-    </v-sheet>
-
+      LOGO
+    </v-card-title>        
+  </v-sheet>
 </template>
 
 <style lang="scss">
 .Header {
-    position: fixed;
-    display: flex;
-    justify-content: end;
-    align-items: end;
+  position: fixed;
+  display: flex;
+  z-index: 1;
+  justify-content: end;
+  align-items: end;
+  background-color: #e9e9ff;
+}
+
+.logo {  
+  cursor: pointer;
+  margin-left: 20px;
+  font-weight: bold;
 }
 
 </style>

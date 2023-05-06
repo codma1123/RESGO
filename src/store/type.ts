@@ -39,7 +39,8 @@ type Effect = {
 type AsyncStore = {
   imgResult: AsyncState<any>
   model: AsyncState<any>
-  result: AsyncState<any>
+  result: AsyncState<string[]>
+  naverLocationSearchResult: AsyncState<any[]>
 }
 
 export type {
