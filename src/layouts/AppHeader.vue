@@ -9,7 +9,7 @@ const router = useRouter()
     class="Header"
     height="50"
     width="100%"
-    color="#e9e9ff"
+    color="#ffffff"
   >
     <v-card-title 
       class="logo"
@@ -27,7 +27,6 @@ const router = useRouter()
   z-index: 1;
   justify-content: end;
   align-items: end;
-  background-color: #e9e9ff;
 }
 
 .logo {  

@@ -15,7 +15,8 @@ export const useStore = defineStore('store', () => {
     imgResult: initial<ImgResult>(),
     model: initial<Model>(),
     result: initial<string[]>(),
-    naverLocationSearchResult: initial<ResultItem[]>()
+    naverLocationSearchResult: initial<ResultItem[]>(),
+    currentPosition: initial<any>()
   })
 
   
@@ -29,7 +30,7 @@ export const useStore = defineStore('store', () => {
   // 비동기스토어 관리함수 초기화
   // const asyncStateCallback = createAsyncStoreCallback(asyncStates)
 
-  const requestKakao = async (img: File): Promise<string> => {
+  const requestKakao = async (img: File): Promise<string[]> => {
     const { result } = asyncStates
     result.loading = true    
 
@@ -45,8 +46,10 @@ export const useStore = defineStore('store', () => {
         .map(value => value.class_info[0].food_name)
       )]
 
+      console.log(result.data)
+
       // 네이버 검색 쿼리 전송을 위한 promise return 
-      return result.data.slice(0, 1).join(' ')
+      return result.data
 
     } catch (e: unknown) {
       throw e
@@ -73,10 +76,31 @@ export const useStore = defineStore('store', () => {
     }
   }
 
+  const loadLatLng = async () => {
+    const { currentPosition } = asyncStates
+    currentPosition.loading = true
+
+    navigator
+      .geolocation
+      .getCurrentPosition(
+        ((success: GeolocationPosition) => {
+          const { latitude, longitude } = success.coords
+          currentPosition.data = { latitude, longitude }
+          console.log(currentPosition.data)
+        }),
+        ((error: unknown) => {
+          console.log(error)
+        })
+      )
+
+      currentPosition.loading = false
+  }
+
   return {
     asyncStates,
     requestKakao,
     resquestNaver,
+    loadLatLng,
     states
   }
 })

@@ -10,11 +10,16 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import AppHeader from './layouts/AppHeader.vue'
+import { useStore } from './store';
+
+const { loadLatLng } = useStore()
 
 onMounted(() => {
   if (sessionStorage.fonts) {
     document.documentElement.classList.add('wf-active')
   }
+
+  loadLatLng()
 })
 </script>
 

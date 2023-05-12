@@ -33,7 +33,7 @@
     router.push('/result')
     
     const query = await requestKakao(uploadFile.value!)
-    await resquestNaver(query)
+    await resquestNaver(query[0])
   }
   
 </script>

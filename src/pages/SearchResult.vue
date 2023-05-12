@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from '../store';
+import NaverMap from '../components/result/NaverMap.vue';
 
-const { asyncStates: { result, naverLocationSearchResult }, states } = useStore()
+const { 
+  asyncStates: { result, naverLocationSearchResult, currentPosition },
+  states,
+  resquestNaver 
+} = useStore()
 
 const tags = computed<string[]>(() => result.data ?? [])
 
@@ -17,7 +22,7 @@ const countedTags = computed<string[]>(() => {
 
 <template>  
   <VContainer class="SearchResult">
-    <template v-if="!result.loading">
+    <template v-if="!result.loading && !currentPosition.loading">
       <div class="tag-wrapper">
         <VCardTitle value="이미지 분석 격롸">
           이미지 분석 결과
@@ -35,6 +40,7 @@ const countedTags = computed<string[]>(() => {
             color="black"
             variant="outlined"
             v-for="(tag, i) in countedTags" 
+            @click="resquestNaver(tag)"
             :key="i"
           >
             {{ tag }}
@@ -48,16 +54,28 @@ const countedTags = computed<string[]>(() => {
           {{  tagExpand ? '간단히' : '더보기' }}
         </div>
       </div>  
+      <NaverMap />
     </template>
 
     <VProgressCircular v-else class="ProgressCircular"/>
 
-    <div class="result-wrapper" v-if="!naverLocationSearchResult.loading">
+
+
+    <div class="result-wrapper" v-if="!result.loading && !currentPosition.loading">
       <VCardTitle>
-        이미지 분석 결과를 토대로 음식점을 검색해보았어요.
+        이미지 분석 결과를 토대로 검색해보았어요.
       </VCardTitle>
+      <VCardSubtitle>
+        {{ countedTags[0]}}에 대한 검색 결과입니다.
+      </VCardSubtitle>
       <VCardText>
-        {{ naverLocationSearchResult.data }}
+        <div class="mt-5" v-for="(data, i) in naverLocationSearchResult.data" :key="i">
+          <VCardTitle>
+            {{ data.title }}
+          </VCardTitle>
+          <VCardSubtitle>
+          </VCardSubtitle>
+        </div>
       </VCardText>
     </div>
 
