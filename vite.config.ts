@@ -23,12 +23,17 @@ export default defineConfig({
 			'/api': {
 				target: 'https://a993e630-bbb4-4e5e-87c9-6a0f187f5c15.api.kr-central-1.kakaoi.io',
 				rewrite: (path) => path.replace(/^\/api/, ''),
-        ...defaultProxyOption,
+       			 ...defaultProxyOption,
 			},
 			'/naver': {
 				target: 'https://openapi.naver.com',
 				rewrite: (path) => path.replace(/^\/naver/, ''),
-        ...defaultProxyOption,
+        		...defaultProxyOption,
+			},
+			'/geocoding': {
+				target: 'https://naveropenapi.apigw.ntruss.com',
+				rewrite: (path) => path.replace(/^\/geocoding/, ''),
+				...defaultProxyOption
 			}
 		}
   }

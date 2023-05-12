@@ -1,3 +1,10 @@
+// 기본 타입
+type LatLng = {
+  latitude: number, 
+  longitude: number
+}
+
+
 // 카카오 음식 분석
 interface KakaoFoodDetectionResponse {
   created: string
@@ -38,7 +45,13 @@ interface ResultItem {
   link: string
   category: string
   description: string
-  telephone: string  
+  telephone: string
+  address: string
+}
+
+// 네이버 geocoding
+interface NaverGeocodingResponse {
+
 }
 
 export type {
@@ -47,5 +60,9 @@ export type {
   Class_Info,
 
   NaverLocationResponse,
-  ResultItem
+  ResultItem,
+
+  NaverGeocodingResponse,
+
+  LatLng
 }

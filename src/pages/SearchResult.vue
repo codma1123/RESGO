@@ -2,14 +2,19 @@
 import { computed, ref } from 'vue';
 import { useStore } from '../store';
 import NaverMap from '../components/result/NaverMap.vue';
+import { useRouter } from 'vue-router';
+import { ResultItem } from '../api/type';
 
 const { 
   asyncStates: { result, naverLocationSearchResult, currentPosition },
   states,
-  resquestNaver 
+  resquestNaver,
+  loadCurrnetStore
 } = useStore()
 
 const tags = computed<string[]>(() => result.data ?? [])
+
+const { push } = useRouter()
 
 const tagExpand = ref<boolean>(false)
 
@@ -17,6 +22,12 @@ const countedTags = computed<string[]>(() => {
   if(tags.value.length < 5) return tags.value
   return tagExpand.value ? tags.value : tags.value.slice(0, 5)
 })
+
+const onClickCard = (card: ResultItem) => {
+  console.log(card)
+  loadCurrnetStore(card)
+  push(`/detail/${card.title}`)
+}
 
 </script>
 
@@ -48,35 +59,44 @@ const countedTags = computed<string[]>(() => {
         </div>
   
         <div 
+          v-if="countedTags.length > 5"
           class="more"
           @click="tagExpand = !tagExpand"
         >
-          {{  tagExpand ? '간단히' : '더보기' }}
+          {{ tagExpand ? '간단히' : '더보기' }}
         </div>
       </div>  
-      <NaverMap />
     </template>
 
     <VProgressCircular v-else class="ProgressCircular"/>
-
-
 
     <div class="result-wrapper" v-if="!result.loading && !currentPosition.loading">
       <VCardTitle>
         이미지 분석 결과를 토대로 검색해보았어요.
       </VCardTitle>
-      <VCardSubtitle>
-        {{ countedTags[0]}}에 대한 검색 결과입니다.
+      <VCardSubtitle class="mb-5">
+        <span class="font-weight-bold mr-1">
+          {{ states.currentSearch }}
+        </span>에 대한 검색 결과입니다.
       </VCardSubtitle>
-      <VCardText>
-        <div class="mt-5" v-for="(data, i) in naverLocationSearchResult.data" :key="i">
+      
+
+      <div>
+        <div 
+          class="mt-5 result-card" 
+          v-for="(data, i) in naverLocationSearchResult.data" 
+          :key="i"
+          @click="onClickCard(data)"
+        >
           <VCardTitle>
             {{ data.title }}
           </VCardTitle>
           <VCardSubtitle>
+            {{ data.address }}
           </VCardSubtitle>
         </div>
-      </VCardText>
+      </div>
+      <NaverMap />
     </div>
 
   </VContainer>  
@@ -141,6 +161,16 @@ const countedTags = computed<string[]>(() => {
   position: absolute;
   top: 50%;
   left: 50%;
+}
+
+.result-card {
+  cursor: pointer;
+  opacity: .8;
+  transition: .2s all;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 </style>

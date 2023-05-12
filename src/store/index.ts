@@ -3,8 +3,8 @@ import { reactive } from 'vue'
 import { ImgResult, Model } from './type'
 import { asyncUtils } from './utils'
 
-import  { kakaoFoodDetectionRequest, naverLocationSearchRequest } from '../api'
-import { ResultItem } from '../api/type'
+import  { geocodingRequest, geocodingReverseRequest, kakaoFoodDetectionRequest, naverLocationSearchRequest } from '../api'
+import { LatLng, ResultItem } from '../api/type'
 
 const { initial } = asyncUtils
 
@@ -16,14 +16,18 @@ export const useStore = defineStore('store', () => {
     model: initial<Model>(),
     result: initial<string[]>(),
     naverLocationSearchResult: initial<ResultItem[]>(),
-    currentPosition: initial<any>()
+    currentPosition: initial<LatLng>(),
+    currentStore: initial<any>(),
+    address: initial<any>(),
+    location: initial<any>()
   })
 
   
   // 상태
   const states = reactive({
     imgTags: [],
-    imgUrl: ''
+    imgUrl: '',
+    currentSearch: ''
   })
 
 
@@ -45,8 +49,6 @@ export const useStore = defineStore('store', () => {
         .sort((value, target) => value.h * value.w > target.h * target.h ? -1 : 1)
         .map(value => value.class_info[0].food_name)
       )]
-
-      console.log(result.data)
 
       // 네이버 검색 쿼리 전송을 위한 promise return 
       return result.data
@@ -72,6 +74,7 @@ export const useStore = defineStore('store', () => {
     } catch (e: unknown) {
       throw e
     } finally {
+      states.currentSearch = query
       naverLocationSearchResult.loading = false    
     }
   }
@@ -93,13 +96,54 @@ export const useStore = defineStore('store', () => {
         })
       )
 
-      currentPosition.loading = false
+    currentPosition.loading = false
   }
+
+  const loadAddressByLocation = async (latlng: LatLng) => {
+    const { address } = asyncStates
+    address.loading = true
+
+    try {
+      const res = await geocodingReverseRequest(latlng)
+      
+      console.log(res.data)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      address.loading = false
+    }
+  }
+
+  const loadLocationByAddress = async (address: string) => {
+    const { location } = asyncStates
+    location.loading = true
+    try {
+      console.log('gogo')
+      const res = await geocodingRequest(address)
+
+      console.log(res.data.addresses[0].x, res.data.addresses[0].y)
+    } catch (e) {
+
+    } finally {
+      location.loading = false
+    }
+  }
+
+
+
+  const loadCurrnetStore = (card: ResultItem) => {
+    asyncStates.currentStore.data = card
+  }
+
+  
 
   return {
     asyncStates,
     requestKakao,
     resquestNaver,
+    loadCurrnetStore,
+    loadAddressByLocation,
+    loadLocationByAddress,
     loadLatLng,
     states
   }
