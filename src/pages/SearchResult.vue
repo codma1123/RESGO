@@ -1,41 +1,41 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from '../store';
 import NaverMap from '../components/result/NaverMap.vue';
 import { useRouter } from 'vue-router';
-import { ResultItem } from '../api/type';
+import ResultCard from '../components/result/ResultCard.vue';
+import { onMounted } from 'vue';
 
 const { 
   asyncStates: { result, naverLocationSearchResult, currentPosition },
   states,
-  resquestNaver,
-  loadCurrnetStore
+  requestNaver,
 } = useStore()
-
-const tags = computed<string[]>(() => result.data ?? [])
 
 const { push } = useRouter()
 
+const tags = computed<string[]>(() => result.data ?? [])
 const tagExpand = ref<boolean>(false)
 
 const countedTags = computed<string[]>(() => {
   if(tags.value.length < 5) return tags.value
-  return tagExpand.value ? tags.value : tags.value.slice(0, 5)
+  return tagExpand.value ? tags.value : tags.value.slice(0, 4)
 })
 
-const onClickCard = (card: ResultItem) => {
-  console.log(card)
-  loadCurrnetStore(card)
-  push(`/detail/${card.title}`)
+const onStoreSelect = (storeId: number) => {
+  states.selectedStoreId = storeId
+  push(`/detail/${storeId}`)
 }
 
 </script>
 
-<template>  
+<template>    
   <VContainer class="SearchResult">
+
+    <!-- 이미지 분석 결과 -->
     <template v-if="!result.loading && !currentPosition.loading">
       <div class="tag-wrapper">
-        <VCardTitle value="이미지 분석 격롸">
+        <VCardTitle>
           이미지 분석 결과
         </VCardTitle>      
   
@@ -43,61 +43,69 @@ const onClickCard = (card: ResultItem) => {
           class="img"
           :src="states.imgUrl"
         />
-  
-        <div :class="['chip-wrapper', tagExpand ? 'wrap': '']" >
+
+        <VChipGroup 
+          selected-class="text-info" 
+          :class="['chip-wrapper', tagExpand ? 'wrap': '']"
+        >
           <VChip
-            class="chip"
-            label
+            v-for="(tag, i) in countedTags" 
+            @click="requestNaver(tag)"
+            :key="i"
+            class="chip"            
             color="black"
             variant="outlined"
-            v-for="(tag, i) in countedTags" 
-            @click="resquestNaver(tag)"
-            :key="i"
           >
             {{ tag }}
-          </VChip>
-        </div>
-  
+          </VChip>          
+        </VChipGroup>
+        
         <div 
-          v-if="countedTags.length > 5"
+          v-if="tags.length > 4"
           class="more"
           @click="tagExpand = !tagExpand"
         >
-          {{ tagExpand ? '간단히' : '더보기' }}
+          <v-icon>
+            {{ tagExpand ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+          </v-icon>
         </div>
+  
       </div>  
-    </template>
 
-    <VProgressCircular v-else class="ProgressCircular"/>
-
-    <div class="result-wrapper" v-if="!result.loading && !currentPosition.loading">
-      <VCardTitle>
-        이미지 분석 결과를 토대로 검색해보았어요.
-      </VCardTitle>
-      <VCardSubtitle class="mb-5">
-        <span class="font-weight-bold mr-1">
-          {{ states.currentSearch }}
-        </span>에 대한 검색 결과입니다.
-      </VCardSubtitle>
       
-
+    </template>
+  
+    <VProgressCircular v-else class="ProgressCircular"/>
+        
+    
+    <!-- 결과 리스트 -->
+    <template v-if="!result.loading && !currentPosition.loading && !naverLocationSearchResult.loading">
       <div>
-        <div 
-          class="mt-5 result-card" 
-          v-for="(data, i) in naverLocationSearchResult.data" 
-          :key="i"
-          @click="onClickCard(data)"
-        >
-          <VCardTitle>
-            {{ data.title }}
-          </VCardTitle>
-          <VCardSubtitle>
-            {{ data.address }}
-          </VCardSubtitle>
-        </div>
+        <VDivider class="mt-5 mb-5"/>
+        <VCardTitle>
+          이미지 분석 결과를 토대로 검색해보았어요.
+        </VCardTitle>
+
+        
+      
+        <VCardSubtitle>
+          <span class="font-weight-bold mr-1 text-info">
+            {{ states.currentSearch }}
+          </span>을 팔고있는 가게들입니다.
+        </VCardSubtitle>
       </div>
-      <NaverMap />
-    </div>
+      
+      <div class="result-card-wrapper">
+        <ResultCard 
+          v-for="store in naverLocationSearchResult.data" 
+          :key="store.id"
+          :store="store"
+          @click="onStoreSelect(store.id)"
+        />        
+      </div>
+      
+      <NaverMap @marker-click="id => onStoreSelect(id)" />
+    </template>
 
   </VContainer>  
 </template>
@@ -111,14 +119,13 @@ const onClickCard = (card: ResultItem) => {
   align-items: center;
 }
 
-.result-wrapper,
 .tag-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 400px;
-  margin-top: 50px;  
+  margin-top: 30px;  
   .img {
     min-width: 100% !important;
     border-radius: 1rem;
@@ -128,7 +135,6 @@ const onClickCard = (card: ResultItem) => {
     margin-top: 10px;
     display: flex;
     justify-content: center;
-    gap: 5px;
     max-width: 100%;
     overflow-x: scroll;
     
@@ -136,12 +142,7 @@ const onClickCard = (card: ResultItem) => {
       display: flex;
       justify-content: center;
       align-items: center;
-      cursor: pointer;
-      transition: all .2s;
-
-      &:hover {
-        color: rgb(165, 112, 112) !important;
-      }
+      cursor: pointer;      
     }
 
     &.wrap {
@@ -163,14 +164,11 @@ const onClickCard = (card: ResultItem) => {
   left: 50%;
 }
 
-.result-card {
-  cursor: pointer;
-  opacity: .8;
-  transition: .2s all;
-
-  &:hover {
-    opacity: 1;
-  }
+.result-card-wrapper {
+  width: 500px;
+  padding-right: 40px;
+  padding-left: 40px;
+  margin-top: 20px;  
 }
 
 </style>

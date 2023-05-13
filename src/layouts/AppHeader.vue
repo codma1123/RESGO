@@ -15,7 +15,7 @@ const router = useRouter()
       class="logo"
       @click="router.push('/')"      
     >
-      LOGO
+      RESGO
     </v-card-title>        
   </v-sheet>
 </template>
@@ -25,8 +25,8 @@ const router = useRouter()
   position: fixed;
   display: flex;
   z-index: 1;
-  justify-content: end;
-  align-items: end;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .logo {  

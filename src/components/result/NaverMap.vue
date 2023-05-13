@@ -11,11 +11,24 @@
     >
       <NaverMarker 
         class="marker"        
-        v-bind="currentPosition.data"
-        @onLoad="onLoadMarker"
-        @click="isMarkerOpen = !isMarkerOpen"        
-      />        
-      <NaverInfoWindow
+        v-bind="currentPosition.data ?? { latitude: 0, longitude: 0 }"        
+        @click="isMarkerOpen = !isMarkerOpen"
+      />
+      
+      <NaverMarker        
+        class="marker" 
+        v-for="{ id, latitude, longitude, title } in naverLocationSearchResult.data"
+        :key="id"
+        :latitude="latitude"
+        :longitude="longitude"
+        @click="emit('markerClick', id)"
+      >
+        <div id="innerMarker">
+          {{ title }}
+        </div>
+      </NaverMarker>
+
+      <!-- <NaverInfoWindow
         id="windowInfo"
         :marker="marker"
         :open="isMarkerOpen"
@@ -25,7 +38,7 @@
         <div ref="infoRef" class="windowInfo">
           인포
         </div>
-      </NaverInfoWindow>
+      </NaverInfoWindow> -->
     </NaverMap>  
   </div>
 </template>
@@ -36,11 +49,6 @@ import { NaverInfoWindow, NaverMap, NaverMarker } from 'vue3-naver-maps';
 import useMapOptions from '../../plugins/map';
 import { useStore } from '../../store';
   
-type Location = {
-  latitude: number
-  longitude: number
-}
-
 type Map = naver.maps.Map
 type Marker = naver.maps.Marker
 type HTMLIcon = naver.maps.HtmlIcon
@@ -54,11 +62,11 @@ const {
   DEFAULT_WINDOWINFO_OPTIONS,
 } = useMapOptions()
 
-const { asyncStates: { currentPosition } } = useStore() 
+const { asyncStates: { currentPosition, naverLocationSearchResult }, loadLatLng } = useStore() 
 
-
-const isError = ref<boolean>(false)
 const initLayers = ['']
+
+const emit = defineEmits<{(e: 'markerClick', id: number): void}>()
 
 // Map
 const mapRef = ref<Map>()
@@ -69,6 +77,7 @@ const mapOptions = computed<MapOptions>(() => ({
 }))
 
 const onLoadMap = (map: Map) => {
+  if (!currentPosition.data) return
   const latLng = new window.naver.maps.LatLng(currentPosition.data.latitude, currentPosition.data.longitude)
   map.setCenter(latLng)  
   mapRef.value = map
@@ -83,6 +92,7 @@ const onLoadMarker = (markerObject: Marker) => {
   marker.value = markerObject   
 }
 
+
 const htmlIconOption = computed<HTMLIcon>(() => ({
   content: (marker.value ?? {}) as HTMLElement,
   ...DEFAULT_MARKER_SIZE
@@ -96,8 +106,8 @@ const infoRef = ref<HTMLElement | null>(null)
 const infoWindowOptions = computed<InfoWindowOptions>(() => ({
   ...DEFAULT_WINDOWINFO_OPTIONS,
   position: {
-    lat: currentPosition.data.latitude,
-    lng: currentPosition.data.longitude
+    lat: currentPosition.data!.latitude,
+    lng: currentPosition.data!.longitude
   },
   content: infoRef.value ?? ''
 }))
@@ -106,26 +116,11 @@ const onLoadedInfoWindow = (windowInfoObject: InfoWindow) => {
   infoWindow.value = windowInfoObject  
 }
 
+onMounted(() => {
+  loadLatLng()  
+})
 
-// Initial
-const loadLocation = () => {
-  navigator
-    .geolocation
-    .getCurrentPosition(   
-      (success: GeolocationPosition) => {
-        const { coords: { latitude, longitude } } = success
-        currentPosition.data.latitude = latitude ?? 0
-        currentPosition.data.longitude = longitude ?? 0
-      },
-      (error: GeolocationPositionError) => {
-        isError.value = true
-      }
-    )
-}
-
-onMounted(() => loadLocation())
-
-onUpdated(() => Object.values(currentPosition).includes(0) && loadLocation())
+onUpdated(() => Object.values(currentPosition).includes(0) && loadLatLng())
 
 </script>
 
@@ -148,14 +143,13 @@ onUpdated(() => Object.values(currentPosition).includes(0) && loadLocation())
 }
 
 #innerMarker {
+  position: relative;
   transition: all .1s ease-in-out;
-  background-color: rgba(233, 150, 122, 0.4);
+  font-size: 12px;
+  white-space: nowrap;
+  background-color: rgba(255, 255, 255);
   padding: .25rem .5rem .25rem .5rem;
-  border-radius: 5px;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-  display: flex;
-  align-items: center;
+  border-radius: 5px;    
   transform: translateX(-80px);
     
   .icon {
@@ -166,6 +160,25 @@ onUpdated(() => Object.values(currentPosition).includes(0) && loadLocation())
     border-radius: 10px;
     margin-right: .5rem;
   }
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 0; 
+    height: 0;
+    background-color: transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-top: 5px solid rgb(255, 255, 255);
+    border-right: 5px solid transparent;
+    margin-top: 22px;
+    right: 45%;
+  }
+
+  &:hover {
+    font-weight: bold;
+  }
+
 }
 
 .windowInfo {
@@ -175,5 +188,6 @@ onUpdated(() => Object.values(currentPosition).includes(0) && loadLocation())
   justify-content: center;
   align-items: center;
 }
+
 
 </style>

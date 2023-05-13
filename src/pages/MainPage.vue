@@ -1,13 +1,16 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { ref } from 'vue'
   import { useStore } from '../store'
   import InputImg, { ImgChangeType } from '../components/InputImg.vue'
   import InputTags from '../components/InputTags.vue'
   import SnackBar from '../components/SnackBar.vue'
-  import { VImg } from 'vuetify/components'
   import { useRouter } from 'vue-router'
 
-  const { requestKakao, resquestNaver, states } = useStore()
+  const { 
+    requestKakao, 
+    requestNaver, 
+    states 
+  } = useStore()
 
   const router = useRouter()
 
@@ -16,47 +19,48 @@
   const tags = ref<string[]>([])
   const snackBar = ref<boolean>(false)
 
-  const imgChange = (e: ImgChangeType): void => {
+  const onImgChange = (e: ImgChangeType): void => {
     img.value = e.img
     uploadFile.value = e.uploadFile
-
   }
   
-  const btnClick = async (): Promise<void> => {
+  const onBtnClick = (): void => {
     if(!img.value) {
       snackBar.value = true
       return
     }
 
     states.imgUrl = img.value
-
     router.push('/result')
-    
+    beforeDetail()    
+  }
+
+  const beforeDetail = async () => {
     const query = await requestKakao(uploadFile.value!)
-    await resquestNaver(query[0])
+    await requestNaver(query[0])
   }
   
 </script>
 
 <template>
   <div class="Main">
-      <div class="Logo">
-        LOGO
-      </div>    
-      <div class="Input">
-        <InputTags v-model:tags="tags"/>
-        <InputImg 
-          @img-change="imgChange"
-        />
-      </div>    
-      <v-btn 
-        class="SubmitBtn"
-        variant="elevated"
-        elevation="0"
-        @click="btnClick"
-      >
-        제출
-      </v-btn>
+    <div class="Logo">
+      LOGO
+    </div>    
+
+    <div class="Input">
+      <InputTags v-model:tags="tags"/>
+      <InputImg @img-change="onImgChange"/>
+    </div>    
+    
+    <VBtn 
+      class="SubmitBtn"
+      variant="elevated"
+      elevation="0"
+      @click="onBtnClick"
+    >
+      제출
+    </VBtn>
   </div>
   
   <SnackBar 
@@ -70,7 +74,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   position: relative;
   height: 100vh;
   height: -webkit-fill-available;

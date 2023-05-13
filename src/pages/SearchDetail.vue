@@ -1,32 +1,35 @@
 <template>
   <VContainer class="SearchDetail">
-    <VCardTitle>
-      {{ currentStore.data }}
+    <VCardTitle>      
+      {{ currentStore.title }}
     </VCardTitle>
+    <VCardSubtitle>
+      {{ currentStore.address }}
+    </VCardSubtitle>
   </VContainer>
 </template> 
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useStore } from '../store';
+import { ResultItem, LatLng } from '../api/type';
 
-const { asyncStates: { currentStore, currentPosition }, loadAddressByLocation, loadLocationByAddress } = useStore()
+const { 
+  asyncStates: { naverLocationSearchResult },
+  states: { selectedStoreId },  
+} = useStore()
 
-onMounted(() => {
-  if(!currentPosition.data) return
-  loadAddressByLocation(currentPosition.data)
-  loadLocationByAddress(currentStore.data.address)
-})
+const currentStore = computed<ResultItem & LatLng>(() => naverLocationSearchResult.data?.find((result) => result.id === selectedStoreId)!)
 
 </script>
 
 <style lang="scss" scoped>
 .SearchDetail {
-  margin-top: 20px;
-  width: 300px;
+  margin-top: 40px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 </style>

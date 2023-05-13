@@ -51,7 +51,7 @@ const useMapOptions = () => {
     zoomControl: true,
     zoomControlOptions: ZOOM_CONTRAL_OPTIONS,
     minZoom: 6,
-    zoom: 13
+    zoom: 8
   }
 
   const DEFAULT_MARKER_SIZE: MarkerSize = {

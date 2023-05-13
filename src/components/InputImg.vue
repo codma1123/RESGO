@@ -16,7 +16,9 @@
             v-model="imgs"
             variant="plain"
           />      
-          <span class="label">사진을 선택해주세요.</span>
+          <span class="label">
+            사진을 선택해주세요.
+          </span>
         </div>
     </transition>
 
@@ -35,8 +37,7 @@
 
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
-import { VImg } from 'vuetify/components';
-import { useStore } from '../store';
+import { VFileInput, VImg } from 'vuetify/components';
 
 export type ImgChangeType = {
   img: string
@@ -95,6 +96,8 @@ const imgChange = (e: Event) => nextTick(() => {
     text-align: center;
     
     .label {
+      cursor: not-allowed;
+      pointer-events: none;
       position: absolute;
       transition: .3s;
       top: 50%;
