@@ -84,10 +84,7 @@ const onStoreSelect = (storeId: number) => {
         <VDivider class="mt-5 mb-5"/>
         <VCardTitle>
           이미지 분석 결과를 토대로 검색해보았어요.
-        </VCardTitle>
-
-        
-      
+        </VCardTitle>              
         <VCardSubtitle>
           <span class="font-weight-bold mr-1 text-info">
             {{ states.currentSearch }}
