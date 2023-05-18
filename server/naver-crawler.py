@@ -20,10 +20,10 @@ finally:
    pass
 
 search_box = driver.find_element(By.CLASS_NAME, "input_search")
-search_box.send_keys("삽교소곱창")
-search_box.send_keys(Keys.ENTER) #검색창에 "서울 칵테일바" 입력
+search_box.send_keys("")
+search_box.send_keys(Keys.ENTER) 
 
-time.sleep(7) #화면 표시 기다리기
+time.sleep(6) #화면 표시 기다리기
 # frame = driver.find_element(By.CSS_SELECTOR, "iframe#searchIframe")
 
 
@@ -33,10 +33,20 @@ time.sleep(7) #화면 표시 기다리기
 frame = driver.find_element(By.CSS_SELECTOR, '#entryIframe')
 driver.switch_to.frame(frame)
 
-d = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[1]/div[2]').get_attribute('class')
-print(d)
+# 별점
+star = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[1]/div[2]/span[1]/em').text
 
-time.sleep(3)
+# 영업시간
+d_time = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[6]/div/div[2]/div/div/div[3]/div/a/div/div/div/span/time').text
+
+# 메뉴 컨테이너
+# menu_container = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[7]/div/div[3]/div[1]/ul')
+menu_container = driver.find_element(By.CLASS_NAME, 'jnwQZ')
+print(menu_container)
+
+print('별점: ', star)
+print('영업시간:', d_time.split('에')[0])
+
 # 여기까지 iframe 전환
 
 # scroll_div = driver.find_element(By.XPATH, "//html/body/div[3]/div/div[2]/div[1]")

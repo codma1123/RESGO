@@ -82,14 +82,24 @@ const onStoreSelect = (storeId: number) => {
     <template v-if="!result.loading && !currentPosition.loading && !naverLocationSearchResult.loading">
       <div>
         <VDivider class="mt-5 mb-5"/>
-        <VCardTitle>
-          이미지 분석 결과를 토대로 검색해보았어요.
-        </VCardTitle>              
-        <VCardSubtitle>
-          <span class="font-weight-bold mr-1 text-info">
-            {{ states.currentSearch }}
-          </span>을 팔고있는 가게들입니다.
-        </VCardSubtitle>
+        <template v-if="states.isSearchSuccess">
+          <VCardTitle>
+            이미지 분석 결과를 토대로 검색해보았어요.
+          </VCardTitle>              
+          <VCardSubtitle>
+            <span class="font-weight-bold mr-1 text-info">
+              {{ states.currentSearch }}
+            </span>와 연관된 가게들입니다.
+          </VCardSubtitle>
+        </template>
+        <template v-else>
+          <VCardTitle>
+            이미지 에서 음식을 분석 하는 데 실패했어요!
+          </VCardTitle>
+          <VCardSubtitle>
+            대신 가까운 맛집을 추천 해 드릴게요.
+          </VCardSubtitle>
+        </template>
       </div>
       
       <div class="result-card-wrapper">

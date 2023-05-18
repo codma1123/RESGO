@@ -4,6 +4,7 @@ import { ImgResult, Model } from './type'
 import { asyncUtils } from './utils'
 
 import  { 
+  KakaoFoodDetectionResult,
   geocodingRequest, 
   geocodingReverseRequest, 
   kakaoFoodDetectionRequest, 
@@ -36,7 +37,8 @@ export const useStore = defineStore('store', () => {
     imgTags: [],
     imgUrl: '',
     currentSearch: '',
-    selectedStoreId: null as (number | null)
+    selectedStoreId: null as (number | null),
+    isSearchSuccess: true as boolean
   })
 
 
@@ -57,6 +59,7 @@ export const useStore = defineStore('store', () => {
       const res = await kakaoFoodDetectionRequest(imgBinary)
 
       result.data = [...new Set(res.data.result
+        .filter((value: KakaoFoodDetectionResult) => value.h * value.w > 10000)
         .sort((value, target) => value.h * value.w > target.h * target.h ? -1 : 1)
         .map(value => value.class_info[0].food_name)
       )]
@@ -73,11 +76,15 @@ export const useStore = defineStore('store', () => {
 
   // 네이버 장소 검색 요청
   const requestNaver = async (query: string): Promise<void> => {
+    states.isSearchSuccess = true
     const { naverLocationSearchResult } = asyncStates
     naverLocationSearchResult.loading = true
 
+    if(!query) states.isSearchSuccess = false
+    const qs = query ?? '주변맛집'
+
     try {
-      const res = await naverLocationSearchRequest(query)
+      const res = await naverLocationSearchRequest(qs)
       const items = res.data.items
       const locations = await axios.all(items.map((item: ResultItem) => loadLocationByAddress(item.address)))
       
@@ -88,7 +95,7 @@ export const useStore = defineStore('store', () => {
         title: item.title.replace(/<\/?b>/gi, ''),
       }))
 
-      states.currentSearch = query
+      states.currentSearch = qs
 
     } catch (e: unknown) {
       throw e
