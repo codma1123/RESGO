@@ -9,7 +9,13 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import csv
-driver = webdriver.Chrome("./chromedriver") #selenium 사용에 필요한 chromedriver.exe 파일 경로 지정
+
+# 크롤링 옵션 생성
+options = webdriver.ChromeOptions()
+# 백그라운드 실행 옵션 추가
+options.add_argument("headless")
+
+driver = webdriver.Chrome("./chromedriver", chrome_options=options) #selenium 사용에 필요한 chromedriver.exe 파일 경로 지정
 
 driver.get("https://map.naver.com/v5/") #네이버 신 지도 
 try:
@@ -19,8 +25,9 @@ try:
 finally:
    pass
 
+query = '삽교소곱창 인천광역시 남동구'
 search_box = driver.find_element(By.CLASS_NAME, "input_search")
-search_box.send_keys("")
+search_box.send_keys(query)
 search_box.send_keys(Keys.ENTER) 
 
 time.sleep(6) #화면 표시 기다리기
@@ -35,17 +42,29 @@ driver.switch_to.frame(frame)
 
 # 별점
 star = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[1]/div[2]/span[1]/em').text
+print(star)
+
+# 음식
+menus = driver.find_elements(By.CLASS_NAME, 'gHmZ_')
+for menu in menus:
+   food_name_container = menu.find_element(By.CLASS_NAME, 'place_bluelink')
+   food_price_container = menu.find_element(By.CLASS_NAME, 'awlpp')
+   food_price = food_price_container.text
+   food_name = food_name_container.text
+   print(food_name, food_price)
+   
+driver.quit()
+
 
 # 영업시간
-d_time = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[6]/div/div[2]/div/div/div[3]/div/a/div/div/div/span/time').text
+# d_time = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[6]/div/div[2]/div/div/div[3]/div/a/div/div/div/span/time').text
 
 # 메뉴 컨테이너
 # menu_container = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div[7]/div/div[3]/div[1]/ul')
-menu_container = driver.find_element(By.CLASS_NAME, 'jnwQZ')
-print(menu_container)
+# print(menu_container)
 
-print('별점: ', star)
-print('영업시간:', d_time.split('에')[0])
+# print('별점: ', star)
+# print('영업시간:', d_time.split('에')[0])
 
 # 여기까지 iframe 전환
 

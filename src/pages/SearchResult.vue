@@ -10,6 +10,7 @@ const {
   asyncStates: { result, naverLocationSearchResult, currentPosition },
   states,
   requestNaver,
+  loadStoreDetail
 } = useStore()
 
 const { push } = useRouter()
@@ -23,7 +24,13 @@ const countedTags = computed<string[]>(() => {
 })
 
 const onStoreSelect = (storeId: number) => {
+
+  // 상세 검색 스토어를 미리 변경시킵니다.
   states.selectedStoreId = storeId
+  const currentStore = naverLocationSearchResult.data?.find((result) => result.id === states.selectedStoreId)!
+  const address = currentStore.address.split(' ').slice(0, 4).join(' ')
+  const title = currentStore.title
+  loadStoreDetail(`${title} ${address}`)
   push(`/detail/${storeId}`)
 }
 

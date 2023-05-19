@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { KakaoFoodDetectionResponse, LatLng, NaverGeocodingResponse, NaverLocationResponse } from './type';
+import { CrawNaverMapResponse, KakaoFoodDetectionResponse, LatLng, NaverGeocodingResponse, NaverLocationResponse } from './type';
 
 
 // BASE URLS
@@ -7,6 +7,7 @@ const kakaoBaseUrl = '/api/ai/vision/c55bd2a0b70647ed97519363a94e3648';
 const naverBaseUrl = '/naver/v1/search/local.json'
 const geocodingReverseBaseUrl = '/geocoding/map-reversegeocode/v2/gc'
 const geocodingBaseUrl = '/geocoding/map-geocode/v2/geocode'
+const crawlBaseUrl = '/craw'
 
 
 // API KEYS
@@ -62,9 +63,17 @@ const geocodingRequest = (address: string) => {
   return axios.get<NaverGeocodingResponse>(url, { headers: geocodingBaseHeaders })
 }
 
+const crawlRequest = (address: string) => {
+  const url = `${crawlBaseUrl}?search=${address}`
+  return axios.get<CrawNaverMapResponse>(url, { headers: {
+    'Access-Control-Allow-Origin': '*',
+  }})
+}
+
 export {
   kakaoFoodDetectionRequest,
   naverLocationSearchRequest,
   geocodingReverseRequest,
-  geocodingRequest
+  geocodingRequest,
+  crawlRequest
 }

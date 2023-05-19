@@ -4,7 +4,9 @@ import { ImgResult, Model } from './type'
 import { asyncUtils } from './utils'
 
 import  { 
+  CrawNaverMapResponse,
   KakaoFoodDetectionResult,
+  crawlRequest,
   geocodingRequest, 
   geocodingReverseRequest, 
   kakaoFoodDetectionRequest, 
@@ -28,7 +30,8 @@ export const useStore = defineStore('store', () => {
     naverLocationSearchResult: initial<(ResultItem & LatLng)[]>(),
     currentPosition: initial<LatLng>(),    
     address: initial<any>(),
-    location: initial<any>(),    
+    location: initial<any>(),
+    storeDetail: initial<CrawNaverMapResponse>()
   })
 
   
@@ -166,6 +169,21 @@ export const useStore = defineStore('store', () => {
     }    
   }
 
+  const loadStoreDetail = async (address: string) => {
+    const { storeDetail } = asyncStates
+    storeDetail.loading = true
+
+    try {
+      const res = await crawlRequest(address)
+      storeDetail.data = res.data
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      storeDetail.loading = false
+    }
+  }
+
   
   return {
     asyncStates,
@@ -176,5 +194,6 @@ export const useStore = defineStore('store', () => {
     loadAddressByLocation,
     loadLocationByAddress,
     loadLatLng,
+    loadStoreDetail
   }
 })

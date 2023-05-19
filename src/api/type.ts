@@ -82,6 +82,19 @@ interface AddressElement {
 }
 
 
+
+// 네이버 지도 크롤링
+interface CrawNaverMapResponse {
+  star: number
+  lists: MenuContent[]
+}
+
+interface MenuContent {
+  food_name: string
+  food_price: string | number
+}
+
+
 export type {
   KakaoFoodDetectionResponse,
   KakaoFoodDetectionResult,
@@ -91,6 +104,9 @@ export type {
   ResultItem,
 
   NaverGeocodingResponse,
+
+  CrawNaverMapResponse,
+  MenuContent,
 
   LatLng
 }

@@ -33,7 +33,12 @@ export default defineConfig({
 			'/geocoding': {
 				target: 'https://naveropenapi.apigw.ntruss.com',
 				rewrite: (path) => path.replace(/^\/geocoding/, ''),
-				...defaultProxyOption
+				...defaultProxyOption,
+			},
+			'/craw': {
+				target: 'http://127.0.0.1:5000',
+				rewrite: (path) => path.replace(/^\/craw/, ''),
+				...defaultProxyOption,
 			}
 		}
   }
