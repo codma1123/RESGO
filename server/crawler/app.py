@@ -51,6 +51,8 @@ def crawlNaver(query):
     # 음식
     menus = driver.find_elements(By.CLASS_NAME, 'gHmZ_')
     lists = []
+
+    # 이미지가 없을 경우
     for menu in menus:
       food_name_container = menu.find_element(By.CLASS_NAME, 'place_bluelink')
       food_price_container = menu.find_element(By.CLASS_NAME, 'awlpp')
@@ -59,6 +61,15 @@ def crawlNaver(query):
       
       lists.append({ 'food_name': food_name, 'food_price': food_price})
       print(food_name, food_price)
+
+
+    # 이미지가 있을 경우
+    if lists.len == 0:
+       food_containers = driver.find_elements(By.CLASS_NAME, 'yhGu6')
+       for food_container in food_containers:
+          food_name_container = food_container.find_element(By.CLASS_NAME, 'MENyI')
+          food_price_container = food_container.find_element(By.CLASS_NAME, 'gl2cc')
+          
     
     food_dict = {
       'star': star,
