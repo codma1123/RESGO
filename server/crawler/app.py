@@ -28,7 +28,7 @@ def crawlNaver(query):
     search_box.send_keys(query)
     search_box.send_keys(Keys.ENTER)
 
-    time.sleep(3) #화면 표시 기다리기
+    time.sleep(4) #화면 표시 기다리기
     # frame = driver.find_element(By.CSS_SELECTOR, "iframe#searchIframe")
 
 
@@ -64,16 +64,21 @@ def crawlNaver(query):
 
 
     # 이미지가 있을 경우
-    if lists.len == 0:
+    if len(lists) == 0:
        food_containers = driver.find_elements(By.CLASS_NAME, 'yhGu6')
        for food_container in food_containers:
           food_name_container = food_container.find_element(By.CLASS_NAME, 'MENyI')
           food_price_container = food_container.find_element(By.CLASS_NAME, 'gl2cc')
-          
+          lists.append({ 'food_name': food_name_container.text, 'food_price': food_price_container.text})
+
+    # 영업 시작 시간 추출
+    openTimeWrapper = driver.find_element(By.CLASS_NAME, 'U7pYf')
+    openTime = openTimeWrapper.find_element(By.TAG_NAME, 'time').text
     
     food_dict = {
       'star': star,
-      'lists': lists
+      'lists': lists,
+      'openTime': openTime
     }
     return food_dict
 

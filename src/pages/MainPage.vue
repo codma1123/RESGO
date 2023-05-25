@@ -49,7 +49,6 @@
     </div>    
 
     <div class="Input">
-      <InputTags v-model:tags="tags"/>
       <InputImg @img-change="onImgChange"/>
     </div>    
     

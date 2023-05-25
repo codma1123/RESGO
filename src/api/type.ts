@@ -87,6 +87,7 @@ interface AddressElement {
 interface CrawNaverMapResponse {
   star: number
   lists: MenuContent[]
+  openTime: string
 }
 
 interface MenuContent {

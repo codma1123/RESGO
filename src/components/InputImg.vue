@@ -70,19 +70,19 @@ const imgChange = (e: Event) => nextTick(() => {
 
 <style scoped lang="scss">
 .FileInput {
-  width: 300px !important; 
-  height: 300px !important;  
+  width: 400px !important; 
+  height: 400px !important;  
 }
 
 .ImgBox {
-  height: 300px;
-  width: 300px;
+  height: 400px;
+  width: 400px;
   font-size: 12px;
   position: relative;  
   border-radius: 10%;
   color: rgb(112, 103, 103);
   background-color: white;
-  
+  margin-top: 50px;
   display: flex; 
   padding: 1rem;
   align-items: center;
@@ -101,7 +101,7 @@ const imgChange = (e: Event) => nextTick(() => {
       position: absolute;
       transition: .3s;
       top: 50%;
-      left: 100px;
+      left: 150px;
     }
   }  
 

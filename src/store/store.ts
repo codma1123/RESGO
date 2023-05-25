@@ -41,7 +41,7 @@ export const useStore = defineStore('store', () => {
     imgUrl: '',
     currentSearch: '',
     selectedStoreId: null as (number | null),
-    isSearchSuccess: true as boolean
+    isSearchSuccess: true as boolean,
   })
 
 
@@ -90,7 +90,6 @@ export const useStore = defineStore('store', () => {
       const res = await naverLocationSearchRequest(qs)
       const items = res.data.items
       const locations = await axios.all(items.map((item: ResultItem) => loadLocationByAddress(item.address)))
-      
       naverLocationSearchResult.data = items.map((item: ResultItem, i: number) => ({
         ...item,
         ...locations[i],

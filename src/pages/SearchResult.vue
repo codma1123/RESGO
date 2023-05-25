@@ -18,6 +18,8 @@ const { push } = useRouter()
 const tags = computed<string[]>(() => result.data ?? [])
 const tagExpand = ref<boolean>(false)
 
+const chipSelect = ref<number>(0)
+
 const countedTags = computed<string[]>(() => {
   if(tags.value.length < 5) return tags.value
   return tagExpand.value ? tags.value : tags.value.slice(0, 4)
@@ -50,9 +52,9 @@ const onStoreSelect = (storeId: number) => {
           class="img"
           :src="states.imgUrl"
         />
-
         <VChipGroup 
           selected-class="text-info" 
+          v-model="chipSelect"
           :class="['chip-wrapper', tagExpand ? 'wrap': '']"
         >
           <VChip
@@ -82,9 +84,14 @@ const onStoreSelect = (storeId: number) => {
       
     </template>
   
-    <VProgressCircular v-else class="ProgressCircular"/>
-        
-    
+    <VProgressCircular 
+      v-else 
+     class="ProgressCircular" 
+      model-value="80"
+      color="info"
+      indeterminate
+    />
+      
     <!-- 결과 리스트 -->
     <template v-if="!result.loading && !currentPosition.loading && !naverLocationSearchResult.loading">
       <div>
