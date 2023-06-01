@@ -45,7 +45,6 @@
 <template>
   <div class="Main">
     <div class="Logo">
-      LOGO
     </div>    
 
     <div class="Input">
@@ -54,6 +53,7 @@
     
     <VBtn 
       class="SubmitBtn"
+      color="info"
       variant="elevated"
       elevation="0"
       @click="onBtnClick"

@@ -12,7 +12,7 @@ import { onMounted } from 'vue';
 import AppHeader from './layouts/AppHeader.vue'
 import { useStore } from './store';
 
-const { loadLatLng } = useStore()
+const { loadLatLng, loadRecommend } = useStore()
 
 onMounted(() => {
   if (sessionStorage.fonts) {
@@ -20,6 +20,7 @@ onMounted(() => {
   }
 
   loadLatLng()
+  loadRecommend()
 })
 </script>
 

@@ -9,6 +9,7 @@ import  {
   crawlRequest,
   geocodingRequest, 
   geocodingReverseRequest, 
+  getRecommend, 
   kakaoFoodDetectionRequest, 
   naverLocationSearchRequest 
 } from '../api'
@@ -31,7 +32,8 @@ export const useStore = defineStore('store', () => {
     currentPosition: initial<LatLng>(),    
     address: initial<any>(),
     location: initial<any>(),
-    storeDetail: initial<CrawNaverMapResponse>()
+    storeDetail: initial<CrawNaverMapResponse>(),
+    recommends: initial<any>(),
   })
 
   
@@ -183,6 +185,22 @@ export const useStore = defineStore('store', () => {
     }
   }
 
+  const loadRecommend = async () => {
+    const { recommends } = asyncStates
+
+    recommends.loading = true
+
+    try {
+      const res = await getRecommend()
+      console.log(res.data)
+      recommends.data = res.data
+    } catch (e) {
+      console.log(e)
+    } finally {
+      recommends.loading = false
+    }
+  }
+
   
   return {
     asyncStates,
@@ -193,6 +211,7 @@ export const useStore = defineStore('store', () => {
     loadAddressByLocation,
     loadLocationByAddress,
     loadLatLng,
-    loadStoreDetail
+    loadStoreDetail,
+    loadRecommend
   }
 })

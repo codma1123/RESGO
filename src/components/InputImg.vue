@@ -1,37 +1,33 @@
 <template>  
-  <div class="ImgBox">    
-    <transition name="fade">
-      <v-img
-          v-if="imgs.length !== 0"
-          class="Img"
-          ref="imgObj"      
-          :src="img"
-        />
-        <div v-else class="Input">
-          <v-file-input
-            class="FileInput"        
-            accept="image/png, image/jpeg, image/bmp"
-            prepend-icon=""
-            @change="imgChange"
-            v-model="imgs"
-            variant="plain"
-          />      
-          <span class="label">
-            사진을 선택해주세요.
-          </span>
-        </div>
-    </transition>
+  <div :class="['ImgBox', imgs.length !== 0 ? 'active' : '']"  >    
+    <v-img
+      v-if="imgs.length !== 0"
+      class="Img"
+      ref="imgObj"      
+      :src="img"
+    />
+    <div v-else class="Input">
+      <v-file-input
+        class="FileInput"  
+        accept="image/png, image/jpeg, image/bmp"
+        prepend-icon=""
+        @change="imgChange"
+        v-model="imgs"
+        variant="plain"
+      />      
+      <span class="label">
+        사진을 선택해주세요.
+      </span>
+    </div>
 
-    <transition name="fade">
-      <v-btn 
-        v-if="imgs.length !== 0"
-        density="compact"
-        elevation="0"
-        class="CloseBtn" 
-        icon="mdi-close"
-        @click="imgs = []"
-      />
-    </transition>
+    <v-btn 
+      v-if="imgs.length !== 0"
+      density="compact"
+      elevation="0"
+      class="CloseBtn" 
+      icon="mdi-close"
+      @click="imgs = []"
+    />
   </div>       
 </template>
 
@@ -71,7 +67,7 @@ const imgChange = (e: Event) => nextTick(() => {
 <style scoped lang="scss">
 .FileInput {
   width: 400px !important; 
-  height: 400px !important;  
+  height: 400px !important;
 }
 
 .ImgBox {
@@ -89,7 +85,13 @@ const imgChange = (e: Event) => nextTick(() => {
   justify-content: center;
   overflow: hidden;
   animation-fill-mode: forwards;
-  transition: .5s;
+  border: 3px dashed rgba(33, 150, 243, .4);
+  box-sizing: border-box;
+
+  &.active {
+    border: none;
+  }
+  
 
   .Input {
     position: relative;
@@ -100,7 +102,7 @@ const imgChange = (e: Event) => nextTick(() => {
       pointer-events: none;
       position: absolute;
       transition: .3s;
-      top: 50%;
+      top: 35%;
       left: 150px;
     }
   }  

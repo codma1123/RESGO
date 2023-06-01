@@ -12,7 +12,7 @@ const router = useRouter()
     color="#ffffff"
   >
     <v-card-title 
-      class="logo"
+      class="logo text-info"
       @click="router.push('/')"      
     >
       RESGO

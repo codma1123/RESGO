@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CrawNaverMapResponse, KakaoFoodDetectionResponse, LatLng, NaverGeocodingResponse, NaverLocationResponse } from './type';
+import { CrawNaverMapResponse, GetRecommend, KakaoFoodDetectionResponse, LatLng, NaverGeocodingResponse, NaverLocationResponse } from './type';
 
 
 // BASE URLS
@@ -69,11 +69,16 @@ const crawlRequest = (address: string) => {
     'Access-Control-Allow-Origin': '*',
   }})
 }
+const getRecommend = () => {
+  const url = 'http://localhost:3000/recommend'
+  return axios.get<GetRecommend>(url)
+}
 
 export {
   kakaoFoodDetectionRequest,
   naverLocationSearchRequest,
   geocodingReverseRequest,
   geocodingRequest,
-  crawlRequest
+  crawlRequest,
+  getRecommend
 }
