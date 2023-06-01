@@ -201,6 +201,11 @@ export const useStore = defineStore('store', () => {
     }
   }
 
+  const postSearch = async (tags: string) => {
+    
+  }
+  
+
   
   return {
     asyncStates,

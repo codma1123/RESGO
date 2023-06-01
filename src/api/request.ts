@@ -72,6 +72,7 @@ const geocodingRequest = (address: string) => {
   });
 };
 
+
 const crawlRequest = (address: string) => {
   const url = `${crawlBaseUrl}?search=${address}`;
   return axios.get<CrawNaverMapResponse>(url, {
@@ -85,6 +86,15 @@ const getRecommend = () => {
   return axios.get<GetRecommend>(url);
 };
 
+const searchResultRequest = (tag: string) => {
+  const body = {
+    searchword: tag
+  }
+
+  const url = '/db/searchpost'
+  return axios.post<void>(url, body)
+}
+
 export {
   kakaoFoodDetectionRequest,
   naverLocationSearchRequest,
@@ -92,4 +102,5 @@ export {
   geocodingRequest,
   crawlRequest,
   getRecommend,
+  searchResultRequest
 };

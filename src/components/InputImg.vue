@@ -78,7 +78,7 @@ const imgChange = (e: Event) => nextTick(() => {
   border-radius: 10%;
   color: rgb(112, 103, 103);
   background-color: white;
-  margin-top: 50px;
+  margin-top: 30px;
   display: flex; 
   padding: 1rem;
   align-items: center;

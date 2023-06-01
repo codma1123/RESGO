@@ -9,7 +9,8 @@
   const { 
     requestKakao, 
     requestNaver, 
-    states 
+    states,
+    asyncStates: { recommends } 
   } = useStore()
 
   const router = useRouter()
@@ -45,11 +46,14 @@
 <template>
   <div class="Main">
     <div class="Logo">
+      <img class="logoImg" src="../../public/logo.svg"/>
     </div>    
 
-    <div class="Input">
       <InputImg @img-change="onImgChange"/>
-    </div>    
+
+    <div v-if="!recommends.loading">
+      {{ recommends.data }}
+    </div>
     
     <VBtn 
       class="SubmitBtn"
@@ -91,10 +95,6 @@
   letter-spacing: .5rem;
 }
 
-.Input {
-  margin-top: 10px;
-}
-
 .SubmitBtn {
   margin-top: 50px;
   font-size: 20px;
@@ -127,7 +127,6 @@
   }  
 
   .Logo {
-    display: none;
     font-size: 80px;
     padding-top: 0;
   }
@@ -170,6 +169,10 @@
   100% {
     transform: translateY(0px);
   }
+}
+
+.logoImg {
+  margin-top: 102px;
 }
 
 

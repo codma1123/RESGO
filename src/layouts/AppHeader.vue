@@ -7,16 +7,11 @@ const router = useRouter()
 <template>
   <v-sheet 
     class="Header"
-    height="50"
+    height="13"
     width="100%"
-    color="#ffffff"
+    color="#693D0D"
   >
-    <v-card-title 
-      class="logo text-info"
-      @click="router.push('/')"      
-    >
-      RESGO
-    </v-card-title>        
+
   </v-sheet>
 </template>
 
