@@ -34,6 +34,7 @@ $chip-border-radius: 0px !important;
 body {
   background-color: #fff !important;
   font-family: 'Pretendard';
+  color: #fd9f28
 }
   
 // #app {

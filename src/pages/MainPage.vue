@@ -46,16 +46,16 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
 <template>
   <div class="Main">
     <div class="Logo">
-      <img class="logoImg" src="../../public/logo.svg"/>
+      <img class="logoImg" src="../../public/logov3.svg"/>
     </div>    
-
     <RecommendCarousel />
 
+  
     <InputImg @img-change="onImgChange"/>
-
+    
     <VBtn 
       class="SubmitBtn"
-      color="#693D0D"
+      color="primary"
       variant="elevated"
       elevation="0"
       @click="onBtnClick"
@@ -88,14 +88,12 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
 .Logo {
   color: black;
   font-weight: bold;
-  font-size: 130px; 
   animation-name: fade-in;
   animation-duration: 1s;  
   letter-spacing: .5rem;
 }
 
 .SubmitBtn {
-  margin-top: 50px;
   font-size: 20px;  transition: .3s;
   background-color: rgb(242, 252, 253);
   color: white !important;
@@ -106,7 +104,7 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
   height: 50px !important;
   border-radius: 15px;
   bottom: 40px;
-  width: 80%;
+  width: 70%;
   height: 50px !important;
   border-radius: 15px;
   position: absolute;
@@ -118,18 +116,6 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
   font-size: 15px;
   margin-top: 350px;
 }
-	
-@media (max-width: 800px) {
-
-  .Logo {
-    font-size: 80px;
-    padding-top: 0;
-  }
-
-  .Input {
-    margin-top: 120px;
-  }
-} 
 
 @keyframes fade-in {
   0% {
@@ -167,7 +153,7 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
 }
 
 .logoImg {
-  margin-top: 102px;
+  margin-top: 3rem;
 }
 
 

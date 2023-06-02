@@ -5,9 +5,9 @@ import { useRouter } from 'vue-router';
 <template>
   <v-sheet 
     class="Header"
-    height="13"
+    height="10"
     width="100%"
-    color="#693D0D"
+    color="secondary"
   >
 
   </v-sheet>

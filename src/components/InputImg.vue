@@ -16,7 +16,7 @@
         variant="plain"
       />      
       <span class="label">
-        사진을 선택해주세요.
+        <img src="../../public/picture.svg" alt="">
       </span>
     </div>
 
@@ -66,26 +66,25 @@ const imgChange = (e: Event) => nextTick(() => {
 
 <style scoped lang="scss">
 .FileInput {
-  width: 400px !important; 
-  height: 400px !important;
+  width: 350px !important; 
+  height: 350px !important;
 }
 
 .ImgBox {
-  height: 400px;
-  width: 400px;
+  height: 350px;
+  width: 350px;
   font-size: 12px;
   position: relative;  
   border-radius: 10%;
   color: rgb(112, 103, 103);
   background-color: white;
-  margin-top: 30px;
   display: flex; 
   padding: 1rem;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   animation-fill-mode: forwards;
-  border: 3px dashed rgba(33, 150, 243, .4);
+  border: 3px dashed rgba(176, 180, 184, 0.4);
   box-sizing: border-box;
 
   &.active {
@@ -105,6 +104,7 @@ const imgChange = (e: Event) => nextTick(() => {
       top: 50%;
       transform: translate(-50%, -50%);
       transition: .3s;
+      opacity: .05;
       margin: auto;
     }
   }  
