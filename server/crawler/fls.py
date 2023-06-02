@@ -87,7 +87,7 @@ driver.quit()
 # # csv 파일 생성
 # file = open('stores.csv', mode='w', newline='')
 # writer = csv.writer(file)
-# writer.writerow(["place", "rate", "address", "info", "image"])
+# writer.writerow(["place", "rate", "address", "#693D0D", "image"])
 # final_result = []
 # time.sleep(1)
 # # # 반복 시작

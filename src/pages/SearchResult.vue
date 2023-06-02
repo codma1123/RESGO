@@ -88,7 +88,7 @@ const onStoreSelect = (storeId: number) => {
       v-else 
      class="ProgressCircular" 
       model-value="80"
-      color="info"
+      color="#693D0D"
       indeterminate
     />
       

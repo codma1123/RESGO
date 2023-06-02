@@ -2,9 +2,9 @@
   import { ref } from 'vue'
   import { useStore } from '../store'
   import InputImg, { ImgChangeType } from '../components/InputImg.vue'
-  import InputTags from '../components/InputTags.vue'
   import SnackBar from '../components/SnackBar.vue'
   import { useRouter } from 'vue-router'
+import RecommendCarousel from '../components/RecommendCarousel.vue'
 
   const { 
     requestKakao, 
@@ -49,15 +49,13 @@
       <img class="logoImg" src="../../public/logo.svg"/>
     </div>    
 
-      <InputImg @img-change="onImgChange"/>
+    <RecommendCarousel />
 
-    <div v-if="!recommends.loading">
-      {{ recommends.data }}
-    </div>
-    
+    <InputImg @img-change="onImgChange"/>
+
     <VBtn 
       class="SubmitBtn"
-      color="info"
+      color="#693D0D"
       variant="elevated"
       elevation="0"
       @click="onBtnClick"
@@ -79,14 +77,15 @@
   align-items: center;
   justify-content: flex-start;
   position: relative;
-  height: 100vh;
   height: -webkit-fill-available;
+  max-width: 500px;
+  height: 100vh;
+  margin: 0 auto;
   height: fill-available;
 }
 
 
 .Logo {
-  padding-top: 10vh;
   color: black;
   font-weight: bold;
   font-size: 130px; 
@@ -97,13 +96,20 @@
 
 .SubmitBtn {
   margin-top: 50px;
-  font-size: 20px;
-  transition: .3s;
+  font-size: 20px;  transition: .3s;
   background-color: rgb(242, 252, 253);
-  color: black !important;
+  color: white !important;
   animation-name: up;
   animation-duration: .5s;
   animation-timing-function:cubic-bezier(0.28, 0.5, 0.265, 0.7);
+  width: 80%;
+  height: 50px !important;
+  border-radius: 15px;
+  bottom: 40px;
+  width: 80%;
+  height: 50px !important;
+  border-radius: 15px;
+  position: absolute;
 }
 
 .LoadingCircular {
@@ -114,17 +120,6 @@
 }
 	
 @media (max-width: 800px) {
-  .SubmitBtn {
-    position: fixed;
-    bottom: 40px;
-    width: 80%;
-
-    // display: none;
-    height: 50px !important;
-    border-radius: 15px;
-    // border-top-right-radius: 15px;
-    // border-top-left-radius: 15px;    
-  }  
 
   .Logo {
     font-size: 80px;

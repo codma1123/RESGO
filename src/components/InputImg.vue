@@ -101,9 +101,11 @@ const imgChange = (e: Event) => nextTick(() => {
       cursor: not-allowed;
       pointer-events: none;
       position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       transition: .3s;
-      top: 35%;
-      left: 150px;
+      margin: auto;
     }
   }  
 

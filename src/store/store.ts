@@ -11,7 +11,8 @@ import  {
   geocodingReverseRequest, 
   getRecommend, 
   kakaoFoodDetectionRequest, 
-  naverLocationSearchRequest 
+  naverLocationSearchRequest, 
+  searchResultRequest
 } from '../api'
 
 import { LatLng, ResultItem } from '../api'
@@ -33,7 +34,7 @@ export const useStore = defineStore('store', () => {
     address: initial<any>(),
     location: initial<any>(),
     storeDetail: initial<CrawNaverMapResponse>(),
-    recommends: initial<any>(),
+    recommends: initial<string[]>([]),
   })
 
   
@@ -68,6 +69,8 @@ export const useStore = defineStore('store', () => {
         .sort((value, target) => value.h * value.w > target.h * target.h ? -1 : 1)
         .map(value => value.class_info[0].food_name)
       )]
+
+      postSearch(result.data)
 
       return result.data
 
@@ -177,7 +180,6 @@ export const useStore = defineStore('store', () => {
     try {
       const res = await crawlRequest(address)
       storeDetail.data = res.data
-      console.log(res)
     } catch (e) {
       console.log(e)
     } finally {
@@ -192,8 +194,7 @@ export const useStore = defineStore('store', () => {
 
     try {
       const res = await getRecommend()
-      console.log(res.data)
-      recommends.data = res.data
+      recommends.data = res.data.searchword
     } catch (e) {
       console.log(e)
     } finally {
@@ -201,8 +202,15 @@ export const useStore = defineStore('store', () => {
     }
   }
 
-  const postSearch = async (tags: string) => {
-    
+
+  // tag 포스트 요청
+  const postSearch = async (tags: string[]) => {
+    try {
+      await searchResultRequest(tags)
+      console.log('post 요청 성고')
+    } catch (e: unknown) {
+      console.log('post 요청 실패')
+    }
   }
   
 
@@ -217,6 +225,7 @@ export const useStore = defineStore('store', () => {
     loadLocationByAddress,
     loadLatLng,
     loadStoreDetail,
-    loadRecommend
+    loadRecommend,
+    postSearch
   }
 })

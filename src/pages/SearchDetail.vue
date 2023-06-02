@@ -1,6 +1,6 @@
 <template>
   <VContainer class="SearchDetail" v-if="!storeDetail.loading">
-    <div class="info">
+    <div class="#693D0D">
       <VCardTitle>      
         {{ currentStore.title }}
         {{ star }}
@@ -36,7 +36,7 @@
     v-else 
     class="ProgressCircular"
     model-value="80"
-    color="info"
+    color="#693D0D"
     indeterminate
   />
 </template> 

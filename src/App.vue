@@ -36,13 +36,13 @@ body {
   font-family: 'Pretendard';
 }
   
-#app {
-  height: calc(var(--vh, 1vh) * 100);
-  overflow: scroll;
-  .v-application--wrap {
-    min-height: calc(var(--vh, 1vh) * 100) !important; // 덮어씌우기
-  }
-}
+// #app {
+//   height: calc(var(--vh, 1vh) * 100);
+//   overflow: scroll;
+//   .v-application--wrap {
+//     min-height: calc(var(--vh, 1vh) * 100) !important; // 덮어씌우기
+//   }
+// }
 
 .fade-leave-to,
 .fade-enter-from {

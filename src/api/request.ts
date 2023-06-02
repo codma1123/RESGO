@@ -86,13 +86,13 @@ const getRecommend = () => {
   return axios.get<GetRecommend>(url);
 };
 
-const searchResultRequest = (tag: string) => {
+const searchResultRequest = (tag: string[]) => {
   const body = {
     searchword: tag
   }
 
   const url = '/db/searchpost'
-  return axios.post<void>(url, body)
+  return axios.post<any>(url, body)
 }
 
 export {
