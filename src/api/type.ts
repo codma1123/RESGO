@@ -89,9 +89,11 @@ interface MenuContent {
   food_price: string | number;
 }
 
-interface GetRecommend {
-  searchword: string[];
-}
+type Recommend = {
+  searchword: string;
+  cnt: number;
+};
+type GetRecommend = Recommend[];
 
 export type {
   KakaoFoodDetectionResponse,
@@ -104,4 +106,5 @@ export type {
   MenuContent,
   LatLng,
   GetRecommend,
+  Recommend,
 };

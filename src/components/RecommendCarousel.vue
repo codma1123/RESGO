@@ -8,38 +8,41 @@
     :show-arrows="false"
     hide-delimiters
   >
-    <v-carousel-item 
-      v-for="{rank, title} in ranks"
-      :key="rank"
-      inline
-      class="item"
-    >
-      <span class="text-item">
-        {{ title }}
-      </span>
-    </v-carousel-item>
-    <div class="label">
-      이슈 검색어
-    </div>
+    <template v-if="!recommends.loading">
+      <!-- <v-carousel-item
+        v-for="{ rank, title } in ranks"
+        :key="rank"
+        inline
+        class="item"
+      >
+        <span class="text-item">
+          {{ title }}
+        </span>
+      </v-carousel-item>
+      <div class="label">이슈 검색어</div> -->
+      {{ ranks }}
+    </template>
   </v-carousel>
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from '../store';
 
-const { asyncStates: { recommends } } = useStore() 
+const {
+  asyncStates: { recommends },
+} = useStore();
 
 type Rank = {
-  rank: number
-  title: string
-}
-const ranks = computed<Rank[]>(() => 
-  recommends.data?.map((recommend, i) => ({
-    rank: i,
-    title: recommend
-  })) ?? []
-)
-
+  rank: number;
+  title: string;
+};
+const ranks = computed<Rank[]>(
+  () =>
+    recommends.data?.map((recommend, i) => ({
+      rank: i,
+      title: recommend,
+    })) ?? []
+);
 </script>
 <style lang="scss" scoped>
 .carousel {
@@ -58,7 +61,7 @@ const ranks = computed<Rank[]>(() =>
 
 .label {
   position: absolute;
-  background-color: #47CFD8;
+  background-color: #47cfd8;
   color: white;
   left: 0%;
   top: 10%;
@@ -66,6 +69,5 @@ const ranks = computed<Rank[]>(() =>
   font-weight: 600;
   font-size: 15px;
   border-radius: 10px;
-
 }
 </style>
