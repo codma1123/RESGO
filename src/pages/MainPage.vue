@@ -1,62 +1,19 @@
-<script setup lang="ts">
-  import { ref } from 'vue'
-  import { useStore } from '../store'
-  import InputImg, { ImgChangeType } from '../components/InputImg.vue'
-  import SnackBar from '../components/SnackBar.vue'
-  import { useRouter } from 'vue-router'
-import RecommendCarousel from '../components/RecommendCarousel.vue'
-
-  const { 
-    requestKakao, 
-    requestNaver, 
-    states,
-    asyncStates: { recommends } 
-  } = useStore()
-
-  const router = useRouter()
-
-  const img = ref<string>('')
-  const uploadFile = ref<File>()
-  const tags = ref<string[]>([])
-  const snackBar = ref<boolean>(false)
-
-  const onImgChange = (e: ImgChangeType): void => {
-    img.value = e.img
-    uploadFile.value = e.uploadFile
-  }
-  
-  const onBtnClick = (): void => {
-    if(!img.value) {
-      snackBar.value = true
-      return
-    }
-
-    states.imgUrl = img.value
-    router.push('/result')
-    beforeDetail()    
-  }
-
-  const beforeDetail = async () => {
-    const query = await requestKakao(uploadFile.value!)
-    await requestNaver(query[0])
-  }
-  
-</script>
-
 <template>
   <div class="Main">
-    <div class="Logo">
-      <img class="logoImg" src="../../public/logov3.svg"/>
-    </div>    
-    <RecommendCarousel />
 
+    <!-- 로고 -->
+    <img class="logoImg" src="../../public/logov3.svg"/>
+
+    <!-- 순위 -->
+    <!-- <RecommendCarousel /> -->
   
-    <InputImg @img-change="onImgChange"/>
+    <!-- 이미지 입력 -->
+    <InputImg @imgChange="onImgChange"/>
     
+    <!-- 제출 버튼 -->
     <VBtn 
       class="SubmitBtn"
       color="primary"
-      variant="elevated"
       elevation="0"
       @click="onBtnClick"
     >
@@ -65,10 +22,57 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
   </div>
   
   <SnackBar 
-    v-model:snackBar="snackBar"
-    @clicked="snackBar = false"
+    :snackBar="snackBarEnable"
+    @snackBarClose="snackBarEnable = false"
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useStore } from '../store'
+import InputImg, { ImgChangeType } from '../components/InputImg.vue'
+import SnackBar from '../components/SnackBar.vue'
+import { useRouter } from 'vue-router'
+import RecommendCarousel from '../components/RecommendCarousel.vue'
+
+const { 
+  requestKakao, 
+  requestNaver, 
+  states,
+} = useStore()
+
+const router = useRouter()
+
+const uploadFile = ref<File | null>(null)
+const snackBarEnable = ref(false)
+
+const onImgChange = (e: ImgChangeType) => {
+  states.imgUrl = e.img
+  uploadFile.value = e.uploadFile
+}
+
+const onBtnClick = () => {
+  if(!states.imgUrl || !uploadFile.value) {
+    snackBarEnable.value = true
+    return
+  }
+
+  router.push('/result')
+  loadDetailContent(uploadFile.value)      
+}
+
+const loadDetailContent = async (file: File) => {  
+  try {
+    const query = await requestKakao(file)
+    await requestNaver(query[0])
+  } catch (e) {
+    router
+      .push('/')
+      .then(() => snackBarEnable.value = true)
+  }
+}
+  
+</script>
 
 <style lang="scss">
 .Main {
@@ -84,22 +88,19 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
   height: fill-available;
 }
 
-
-.Logo {
-  color: black;
-  font-weight: bold;
+.logoImg {
   animation-name: fade-in;
   animation-duration: 1s;  
-  letter-spacing: .5rem;
+  margin-top: 3rem;
 }
 
 .SubmitBtn {
   font-size: 20px;  transition: .3s;
   background-color: rgb(242, 252, 253);
   color: white !important;
-  animation-name: up;
+  animation-name: fade-in;
   animation-duration: .5s;
-  animation-timing-function:cubic-bezier(0.28, 0.5, 0.265, 0.7);
+  animation-timing-function: cubic-bezier(0.28, 0.5, 0.265, 0.7);
   width: 80%;
   height: 50px !important;
   border-radius: 15px;
@@ -116,45 +117,5 @@ import RecommendCarousel from '../components/RecommendCarousel.vue'
   font-size: 15px;
   margin-top: 350px;
 }
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-    letter-spacing: 0rem;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
-  100% {
-    letter-spacing: .5rem;
-  }
-}
-
-@keyframes slide-in {
-  0% {    
-    transform: translateX(1700px);
-  }
-
-  100% {
-    transform: translateX(0px);
-  }
-}
-
-@keyframes up {
-  0% {
-    transform: translateY(700px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-.logoImg {
-  margin-top: 3rem;
-}
-
 
 </style>

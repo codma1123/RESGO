@@ -191,7 +191,6 @@ export const useStore = defineStore('store', () => {
 
     try {
       const res = await getRecommend();
-      console.log(res);
       recommends.data = res.data.map((d: Recommend) => d.searchword);
     } catch (e) {
       console.log(e);
@@ -204,9 +203,7 @@ export const useStore = defineStore('store', () => {
   const postSearch = async (tags: string[]) => {
     try {
       await searchResultRequest(tags);
-      console.log('post 요청 성고');
     } catch (e: unknown) {
-      console.log('post 요청 실패');
     }
   };
 

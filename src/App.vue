@@ -32,9 +32,7 @@ $chip-border-radius: 0px !important;
 }
 
 body {
-  background-color: #fff !important;
   font-family: 'Pretendard';
-  color: #fd9f28
 }
   
 // #app {
@@ -58,6 +56,26 @@ body {
 .fade-leave-active,
 .fade-enter-active {
   transition: opacity .5s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes up {
+  0% {
+    transform: translateY(700px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 

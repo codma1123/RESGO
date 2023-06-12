@@ -1,10 +1,11 @@
 <template>
   <v-snackbar 
-    rounded="pill"
-    v-model="enable"
+    :model-value="prop.snackBar"
     timeout="1000"
-    elevation="24"
-    class="SnackBar"    
+    elevation="0"
+    color="white"
+    class="SnackBar"
+    @update:model-value="emit('snackBarClose')"
   >
     이미지 또는 태그를 등록해주세요.
     <template v-slot:actions>
@@ -12,7 +13,7 @@
         class="CloseBtn"
         color="red"
         variant="text"
-        @click="emit('clicked')"
+        @click="emit('snackBarClose')"
       >
         닫기
       </v-btn>
@@ -21,24 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 
-interface SnackBarProp {
-  snackBar: boolean
-}
-
-interface SnackBarEmit {
-  (e: 'updateValue', value: boolean): void
-  (e: 'clicked'): void
-}
-
-const prop = defineProps<SnackBarProp>()
-const emit = defineEmits<SnackBarEmit>()
-
-const enable = computed({
-  get: () => prop.snackBar,
-  set: (value: boolean) => emit('updateValue', value)
-})
-
+const prop = defineProps<{ snackBar: boolean }>()
+const emit = defineEmits<{ (e: 'snackBarClose'): void }>()
 
 </script>
