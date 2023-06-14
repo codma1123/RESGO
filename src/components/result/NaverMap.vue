@@ -1,7 +1,4 @@
-<template>
-  <VCardTitle class="mt-10">
-    주변 지도..
-  </VCardTitle>
+<template>  
   <div class="NaverMap">
     <NaverMap 
       id="map" 
@@ -17,11 +14,11 @@
       
       <NaverMarker        
         class="marker" 
-        v-for="{ id, latitude, longitude, title } in naverLocationSearchResult.data"
+        v-for="{ id, latitude, longitude, title } in props.markerData"
         :key="id"
         :latitude="latitude"
         :longitude="longitude"
-        @click="emit('markerClick', id)"
+        @click="onMarkerClick(id)"
       >
         <div id="innerMarker">
           {{ title }}
@@ -48,6 +45,8 @@ import { onMounted, reactive, ref, computed, onUpdated } from 'vue';
 import { NaverInfoWindow, NaverMap, NaverMarker } from 'vue3-naver-maps';
 import useMapOptions from '../../plugins/map';
 import { useStore } from '../../store';
+import { ResultItem, LatLng } from '../../api';
+import { useRoute } from 'vue-router';
   
 type Map = naver.maps.Map
 type Marker = naver.maps.Marker
@@ -56,13 +55,20 @@ type MapOptions = naver.maps.MapOptions
 type InfoWindowOptions = naver.maps.InfoWindowOptions
 type InfoWindow = naver.maps.InfoWindow
 
+interface NaverMapProps {
+  markerData: (ResultItem & LatLng)[]
+}
+
 const { 
   DEFAULT_MARKER_SIZE, 
   DEFAULT_ZOOM_OPTIONS,
   DEFAULT_WINDOWINFO_OPTIONS,
 } = useMapOptions()
 
-const { asyncStates: { currentPosition, naverLocationSearchResult }, loadLatLng } = useStore() 
+const { asyncStates: { currentPosition }, loadLatLng } = useStore() 
+const route = useRoute()
+
+const props = defineProps<NaverMapProps>()
 
 const initLayers = ['']
 
@@ -90,6 +96,12 @@ const isMarkerOpen = ref<boolean>(false)
 
 const onLoadMarker = (markerObject: Marker) => {  
   marker.value = markerObject   
+}
+
+const onMarkerClick = (id: number) => {
+  if (id !== Number(route.params.id as string)) {
+    emit('markerClick', id)
+  }  
 }
 
 
@@ -132,8 +144,8 @@ onUpdated(() => Object.values(currentPosition).includes(0) && loadLatLng())
 }
 
 #map {
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
   border-radius: 1rem;
 
   &:focus {

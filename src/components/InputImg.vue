@@ -6,19 +6,17 @@
     />
 
     <template v-else>
-      <div class="file-input-box">
-        <v-file-input
-          class="file-input"
-          accept="image/png, image/jpeg, image/bmp"
-          prepend-icon=""
-          @change="imgChange"
-          v-model="imgs"
-          variant="plain"
-        />      
-        <img class="label" src="../../public/picture.svg">      
-        <span>클릭하여 이미지를 넣어주세요.</span>
-      </div>
-    </template>
+      <v-file-input
+        class="file-input"
+        accept="image/png, image/jpeg, image/bmp"
+        prepend-icon=""
+        @change="imgChange"
+        v-model="imgs"
+        variant="piain"
+      />
+      <img class="label" src="../../public/picture.svg">      
+      <span>클릭하여 이미지를 넣어주세요.</span>      
+    </template>             
 
     <v-btn 
       v-if="imgs.length !== 0"
@@ -59,7 +57,7 @@ const imgChange = (e: InputEvent) => nextTick(() => {
   
   emit('img-change', {
     img: img.value,
-    uploadFile: uploadFile
+    uploadFile
   })  
 })
 
@@ -68,6 +66,7 @@ const imgChange = (e: InputEvent) => nextTick(() => {
 <style scoped lang="scss">
 .ImgBox {
   height: 350px;
+  max-height: 350px;
   width: 350px;
   font-size: 12px;
   position: relative;  
@@ -86,38 +85,36 @@ const imgChange = (e: InputEvent) => nextTick(() => {
     border: none;    
   }
   
-  .file-input-box {
-    width: 100%;
-    height: 100%;    
-    .file-input {
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-    }
-    .label {
-      position: absolute;
-      left: 50%;
-      top: 40%;
-      transform: translate(-50%, -40%);
-      transition: .3s;
-      opacity: .05;
-      margin: auto;    
-    }
-    
-    span {
-      position: absolute;
-      top: 55%;
-      left: 50%;
-      transform: translate(-50%, 0%);
-      opacity: .8;
-    }    
-
+  .file-input {
+    z-index: 100;
+    width: 350px;
+    height: 700px;
+    margin-top: 350px;
   }
-  .CloseBtn {
+  .label {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -40%);
+    transition: .3s;
+    opacity: .05;
+    margin: auto;
+    z-index: 1;    
   }
+  
+  span {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    opacity: .8;
+  }    
+
+}
+.CloseBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
 
 

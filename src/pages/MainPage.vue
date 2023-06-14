@@ -91,11 +91,13 @@ const loadDetailContent = async (file: File) => {
 .logoImg {
   animation-name: fade-in;
   animation-duration: 1s;  
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 
 .SubmitBtn {
-  font-size: 20px;  transition: .3s;
+  font-size: 20px;  
+  transition: .3s;
+  margin-top: 100px;
   background-color: rgb(242, 252, 253);
   color: white !important;
   animation-name: fade-in;
@@ -106,9 +108,7 @@ const loadDetailContent = async (file: File) => {
   border-radius: 15px;
   bottom: 40px;
   width: 70%;
-  height: 50px !important;
   border-radius: 15px;
-  position: absolute;
 }
 
 .LoadingCircular {

@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import { reactive } from 'vue';
-import { ImgResult, Model } from './type';
-import { asyncUtils } from './utils';
+import { defineStore } from 'pinia'
+import { reactive } from 'vue'
+import { ImgResult, Model } from './type'
+import { asyncUtils } from './utils'
 
 import {
   CrawNaverMapResponse,
@@ -15,13 +15,13 @@ import {
   kakaoFoodDetectionRequest,
   naverLocationSearchRequest,
   searchResultRequest,
-} from '../api';
+} from '../api'
 
-import { LatLng, ResultItem } from '../api';
+import { LatLng, ResultItem } from '../api'
 
-import axios from 'axios';
+import axios from 'axios'
 
-const { initial } = asyncUtils;
+const { initial } = asyncUtils
 
 export const useStore = defineStore('store', () => {
   // 비동기 상태
@@ -35,7 +35,7 @@ export const useStore = defineStore('store', () => {
     location: initial<any>(),
     storeDetail: initial<CrawNaverMapResponse>(),
     recommends: initial<string[]>([]),
-  });
+  })
 
   // 상태
   const states = reactive({
@@ -44,60 +44,57 @@ export const useStore = defineStore('store', () => {
     currentSearch: '',
     selectedStoreId: null as number | null,
     isSearchSuccess: true as boolean,
-  });
+  })
 
   // 비동기스토어 관리함수 초기화
   // const asyncStateCallback = createAsyncStoreCallback(asyncStates)
 
   // 카카오 음식 인식 요청
   const requestKakao = async (img: File): Promise<string[]> => {
-    const { result } = asyncStates;
-    result.loading = true;
+    const { result } = asyncStates
+    result.loading = true
 
-    const imgBinary = new FormData();
-    imgBinary.append('image', img);
+    const imgBinary = new FormData()
+    imgBinary.append('image', img)
 
     try {
-      const res = await kakaoFoodDetectionRequest(imgBinary);
+      const res = await kakaoFoodDetectionRequest(imgBinary)
 
       result.data = [
         ...new Set(
           res.data.result
-            .filter(
-              (value: KakaoFoodDetectionResult) => value.h * value.w > 10000
-            )
-            .sort((value, target) =>
-              value.h * value.w > target.h * target.h ? -1 : 1
-            )
+            .filter((value) => value.h * value.w > 10000)
+            .sort((value, target) =>value.h * value.w > target.h * target.h ? -1 : 1)
             .map((value) => value.class_info[0].food_name)
-        ),
-      ];
+        )
+      ]
 
-      postSearch(result.data);
+      postSearch(result.data)
 
-      return result.data;
+      return result.data
     } catch (e: unknown) {
-      throw e;
+      throw e
     } finally {
-      result.loading = false;
+      result.loading = false
     }
-  };
+  }
 
   // 네이버 장소 검색 요청
-  const requestNaver = async (query: string): Promise<void> => {
-    states.isSearchSuccess = true;
-    const { naverLocationSearchResult } = asyncStates;
-    naverLocationSearchResult.loading = true;
+  const requestNaver = async (param: string): Promise<void> => {
+    states.isSearchSuccess = true
+    const { naverLocationSearchResult } = asyncStates
+    naverLocationSearchResult.loading = true
 
-    if (!query) states.isSearchSuccess = false;
-    const qs = query ?? '주변맛집';
+    if (!param) states.isSearchSuccess = false
+
+    const searchKeyword = param ?? '주변맛집'
 
     try {
-      const res = await naverLocationSearchRequest(qs);
-      const items = res.data.items;
+      const res = await naverLocationSearchRequest(searchKeyword)
+      const items = res.data.items
       const locations = await axios.all(
-        items.map((item: ResultItem) => loadLocationByAddress(item.address))
-      );
+        items.map(item => loadLocationByAddress(item.address))
+      )
       naverLocationSearchResult.data = items.map(
         (item: ResultItem, i: number) => ({
           ...item,
@@ -105,107 +102,108 @@ export const useStore = defineStore('store', () => {
           id: i,
           title: item.title.replace(/<\/?b>/gi, ''),
         })
-      );
+      )
 
-      states.currentSearch = qs;
+      states.currentSearch = searchKeyword
+      
     } catch (e: unknown) {
-      throw e;
+      throw e
     } finally {
-      naverLocationSearchResult.loading = false;
+      naverLocationSearchResult.loading = false
     }
-  };
+  }
 
   // 현재 위치 불러오기
   const loadLatLng = async () => {
-    const { currentPosition } = asyncStates;
-    currentPosition.loading = true;
+    const { currentPosition } = asyncStates
+    currentPosition.loading = true
 
     navigator.geolocation.getCurrentPosition(
       (success: GeolocationPosition) => {
-        const { latitude, longitude } = success.coords;
-        currentPosition.data = { latitude, longitude };
+        const { latitude, longitude } = success.coords
+        currentPosition.data = { latitude, longitude }
       },
       (error: unknown) => {
-        console.log(error);
+        console.log(error)
       }
-    );
+    )
 
-    currentPosition.loading = false;
-  };
+    currentPosition.loading = false
+  }
 
   // 네이버 [주소] -> [위도, 경도]
   const loadAddressByLocation = async (latlng: LatLng) => {
-    const { address } = asyncStates;
-    address.loading = true;
+    const { address } = asyncStates
+    address.loading = true
 
     try {
-      const res = await geocodingReverseRequest(latlng);
+      const res = await geocodingReverseRequest(latlng)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      address.loading = false;
+      address.loading = false
     }
-  };
+  }
 
   // 네이버 [위도, 경도] -> [주소]
   const loadLocationByAddress = async (address: string): Promise<LatLng> => {
-    const { location } = asyncStates;
-    location.loading = true;
+    const { location } = asyncStates
+    location.loading = true
 
     try {
-      const res = await geocodingRequest(address);
-      const { x: longitude, y: latitude } = res.data.addresses[0];
+      const res = await geocodingRequest(address)
+      const { x: longitude, y: latitude } = res.data.addresses[0]
 
       return {
         latitude: Number(latitude),
         longitude: Number(longitude),
-      };
+      }
     } catch (e) {
       return {
         latitude: 0,
         longitude: 0,
-      };
+      }
     } finally {
-      location.loading = false;
+      location.loading = false
     }
-  };
+  }
 
   const loadStoreDetail = async (address: string) => {
-    const { storeDetail } = asyncStates;
-    storeDetail.loading = true;
+    const { storeDetail } = asyncStates
+    storeDetail.loading = true
 
     try {
-      const res = await crawlRequest(address);
-      storeDetail.data = res.data;
+      const res = await crawlRequest(address)
+      storeDetail.data = res.data
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      storeDetail.loading = false;
+      storeDetail.loading = false
     }
-  };
+  }
 
   const loadRecommend = async () => {
-    const { recommends } = asyncStates;
+    const { recommends } = asyncStates
 
-    recommends.loading = true;
+    recommends.loading = true
 
     try {
-      const res = await getRecommend();
-      recommends.data = res.data.map((d: Recommend) => d.searchword);
+      const res = await getRecommend()
+      recommends.data = res.data.map((d: Recommend) => d.searchword)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      recommends.loading = false;
+      recommends.loading = false
     }
-  };
+  }
 
   // tag 포스트 요청
   const postSearch = async (tags: string[]) => {
     try {
-      await searchResultRequest(tags);
+      await searchResultRequest(tags)
     } catch (e: unknown) {
     }
-  };
+  }
 
   return {
     asyncStates,
@@ -219,5 +217,5 @@ export const useStore = defineStore('store', () => {
     loadStoreDetail,
     loadRecommend,
     postSearch,
-  };
-});
+  }
+})

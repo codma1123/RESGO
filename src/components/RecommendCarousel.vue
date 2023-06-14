@@ -72,12 +72,12 @@ const ranks = computed<Rank[]>(
 <style lang="scss" scoped>
 .carousel {
   height: 100px;
-  padding-left: 100px;
+  padding-left: 120px;
   position: absolute;
 
   margin: 0 auto;
   z-index: 2;
-  top: 40%;
+  top: 38%;
   margin-top: 20px;
 
   .item {

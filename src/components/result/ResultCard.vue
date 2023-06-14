@@ -46,6 +46,8 @@ article {
   box-shadow: 2px 3px 16px 1px rgba(221, 221, 221, 0.08), 2px 3px 6px 3px rgba(230, 230, 230, 0.16);
   border-radius: 16px;
 
+  width: 100%;
+  
   .chip {
     position: absolute;
     right: 30px;

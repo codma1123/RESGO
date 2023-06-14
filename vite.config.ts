@@ -1,6 +1,7 @@
 import { ProxyOptions, defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
+import * as path from 'path'
 
 const defaultProxyOption: ProxyOptions = {
 	changeOrigin: true,	
@@ -46,6 +47,12 @@ export default defineConfig({
 				...defaultProxyOption,
 			}
 		}
+  },
+
+	resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
   }
 })
 
